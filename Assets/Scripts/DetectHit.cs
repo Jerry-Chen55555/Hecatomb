@@ -1,22 +1,27 @@
 using UnityEngine;
-using UnityEngine.InputSystem;
 
-public class ParryHandler : MonoBehaviour
+public class DetectHit : MonoBehaviour
 {
 
-    public InputAction parryAction;
+    
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        parryAction.Enable();
+        
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (parryAction.WasPressedThisFrame())
+        
+    }
+
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+
+        if (other.CompareTag("Enemy"))
         {
-            print("Parried " + Time.time);
+            // Debug.Log("enemy hit");
         }
     }
 }
