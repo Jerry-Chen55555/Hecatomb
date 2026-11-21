@@ -10,6 +10,7 @@ public class BasicAttack : MonoBehaviour
     public Camera cameraMain;
 
     private float _nextSlashTime = 0f;
+    private bool _leftHand = false;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -40,5 +41,11 @@ public class BasicAttack : MonoBehaviour
 
         GameObject slash = Instantiate(SlashPrefab, spawnPosition, rotation);
         slash.transform.SetParent(Player.transform);
+        if (_leftHand)
+        {
+            slash.transform.localScale = new Vector3(-2, 2, 2);
+        }
+
+        _leftHand = !_leftHand;
     }
 }
