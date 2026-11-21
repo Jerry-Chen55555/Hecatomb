@@ -21,7 +21,7 @@ public class DetectHit : MonoBehaviour
 
         if (other.CompareTag("Enemy"))
         {
-            // Debug.Log("enemy hit");
+            Debug.Log("enemy hit");
         }
     }
 }
