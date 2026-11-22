@@ -106,7 +106,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 8ff27286dc0d7494d91787f7234f6a6a, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Assembly-CSharp::Projectile
   Lifetime: 5
   HomingTurnSpeed: 720
@@ -183,9 +183,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4fe7d49a253e14d78845f018e7bc77cb, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Assembly-CSharp::DetectHit
   Damage: 0
+  DamageRequestChannel: {fileID: 11400000, guid: 95ccb7fce23d43c889da7e726869295b, type: 2}
+  PlayerHitChannel: {fileID: 11400000, guid: bcd57692c85b4950a3d1e4e42307ee3a, type: 2}
 --- !u!1 &5719788852984183497
 GameObject:
   m_ObjectHideFlags: 0

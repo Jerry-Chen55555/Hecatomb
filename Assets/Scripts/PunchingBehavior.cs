@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class PunchingBehavior : MonoBehaviour
+public class PunchingBehavior : MonoBehaviour, IDamageable, IEnemyPlayerHit
 {
     public float MoveSpeed = 3f;
     public float Acceleration = 18f;
@@ -16,6 +16,10 @@ public class PunchingBehavior : MonoBehaviour
     public float TurnSpeed = 360f;
     public Collider2D PunchHitbox;
     public int Health = 100;
+    public EnemyEventChannel EnemyDamagedChannel;
+    public EnemyEventChannel EnemyDamageRequestChannel;
+    public EnemyEventChannel EnemyDiedChannel;
+    public EnemyEventChannel PlayerHitChannel;
 
     private enum PunchPhase 
     { 
@@ -36,6 +40,9 @@ public class PunchingBehavior : MonoBehaviour
 
     void Start()
     {
+        EnemyEventListener eventListener = GetComponent<EnemyEventListener>();
+        if (eventListener == null) eventListener = gameObject.AddComponent<EnemyEventListener>();
+        eventListener.ConfigureAll(EnemyDamageRequestChannel, EnemyDamagedChannel, null, EnemyDiedChannel);
         _rigidbody = GetComponent<Rigidbody2D>();
         _sprites = GetComponentsInChildren<SpriteRenderer>();
         _player = GameObject.Find("Player");
@@ -188,11 +195,10 @@ public class PunchingBehavior : MonoBehaviour
         }
 
         Health = Mathf.Max(0, Health - damageAmount);
+        if (EnemyDamagedChannel != null) EnemyDamagedChannel.Raise(gameObject, damageAmount);
         if (Health == 0)
         {
-            EnemyDeathFade fade = GetComponent<EnemyDeathFade>();
-            if (fade == null) fade = gameObject.AddComponent<EnemyDeathFade>();
-            fade.Begin();
+            if (EnemyDiedChannel != null) EnemyDiedChannel.Raise(gameObject);
         }
     }
 }

@@ -4,6 +4,8 @@ using UnityEngine.InputSystem;
 public class DetectHit : MonoBehaviour
 {
     public int Damage = 25;
+    public EnemyEventChannel DamageRequestChannel;
+    public EnemyEventChannel PlayerHitChannel;
 
     private Projectile _projectile;
 
@@ -38,7 +40,7 @@ public class DetectHit : MonoBehaviour
 
         if (isProjectile && touchedEnemy && _projectile.IsReflected)
         {
-            other.transform.root.SendMessage("TakeDamage", Mathf.Max(_projectile.Damage, 100), SendMessageOptions.DontRequireReceiver);
+            RequestDamage(other.transform.root.gameObject, Mathf.Max(_projectile.Damage, 100));
             _projectile.Despawn();
             return;
         }
@@ -57,16 +59,16 @@ public class DetectHit : MonoBehaviour
                     _projectile.Reflect(aim);
                     return;
                 }
-                player.TakeDamage(_projectile.Damage);
+                RequestPlayerDamage(player, _projectile.Damage);
                 _projectile.Despawn();
             }
             else if (TryRegisterPlayerHit(lungeAttacker, punchingAttacker))
             {
                 if (TryParry(player))
                 {
-                    transform.root.SendMessage("TakeDamage", 999999, SendMessageOptions.DontRequireReceiver);
+                    RequestDamage(transform.root.gameObject, 999999);
                 }
-                else player.TakeDamage(Damage);
+                else RequestPlayerDamage(player, Damage);
             }
 
             return;
@@ -85,8 +87,18 @@ public class DetectHit : MonoBehaviour
 
         if (touchedEnemy)
         {
-            other.transform.root.SendMessage("TakeDamage", Damage, SendMessageOptions.DontRequireReceiver);
+            RequestDamage(other.transform.root.gameObject, Damage);
         }
+    }
+
+    void RequestDamage(GameObject target, int amount)
+    {
+        if (DamageRequestChannel != null) DamageRequestChannel.Raise(target, amount);
+    }
+
+    void RequestPlayerDamage(PlayerController player, int amount)
+    {
+        if (PlayerHitChannel != null) PlayerHitChannel.Raise(player.gameObject, amount);
     }
 
     bool TryParry(PlayerController player)
