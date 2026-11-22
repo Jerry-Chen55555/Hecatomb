@@ -147,7 +147,7 @@ MonoBehaviour:
   FireInterval: 3
   ProjectileSpeed: 12
   SpreadAngle: 4
-  ProjectileDamage: 1
+  ProjectileDamage: 15
   Health: 100
 --- !u!61 &5600056412158359404
 BoxCollider2D:

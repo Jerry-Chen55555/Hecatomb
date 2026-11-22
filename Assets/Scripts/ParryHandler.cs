@@ -11,8 +11,14 @@ public class ParryHandler : MonoBehaviour
     public bool isParrying = false;
     public bool parrySuccess = false;
     public float ParryCooldown = 0.5f;
+    public int ParryHealAmount = 20;
     private float _nextParryTime = 0f;
     private Coroutine _animateCoroutine;
+
+    public void AllowQuickParry()
+    {
+        _nextParryTime = Time.time;
+    }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()

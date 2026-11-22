@@ -21,9 +21,15 @@ public class DetectHit : MonoBehaviour
 
         bool touchedEnemy = other.transform.root.CompareTag("Enemy");
         PlayerController player = other.GetComponentInParent<PlayerController>();
+        Projectile otherProjectile = other.GetComponentInParent<Projectile>();
         LungeBehavior lungeAttacker = GetComponentInParent<LungeBehavior>();
         PunchingBehavior punchingAttacker = GetComponentInParent<PunchingBehavior>();
         bool isProjectile = _projectile != null;
+
+        if (isProjectile && otherProjectile != null)
+        {
+            return;
+        }
 
         if (isProjectile && touchedEnemy && !_projectile.IsReflected)
         {
@@ -43,13 +49,15 @@ public class DetectHit : MonoBehaviour
             {
                 if (TryParry(player))
                 {
+                    if (_projectile.IsDroneShot)
+                        player.GetComponent<ParryHandler>().AllowQuickParry();
                     Vector2 aim = Camera.main != null
                         ? (Vector2)Camera.main.ScreenToWorldPoint(Mouse.current.position.ReadValue()) - (Vector2)player.transform.position
                         : (Vector2)transform.position - (Vector2)player.transform.position;
                     _projectile.Reflect(aim);
                     return;
                 }
-                player.Health = Mathf.Max(0, player.Health - _projectile.Damage);
+                player.TakeDamage(_projectile.Damage);
                 _projectile.Despawn();
             }
             else if (TryRegisterPlayerHit(lungeAttacker, punchingAttacker))
@@ -58,7 +66,7 @@ public class DetectHit : MonoBehaviour
                 {
                     transform.root.SendMessage("TakeDamage", 999999, SendMessageOptions.DontRequireReceiver);
                 }
-                else player.Health = Mathf.Max(0, player.Health - Damage);
+                else player.TakeDamage(Damage);
             }
 
             return;
@@ -84,7 +92,10 @@ public class DetectHit : MonoBehaviour
     bool TryParry(PlayerController player)
     {
         ParryHandler parry = player.GetComponent<ParryHandler>();
-        return parry != null && Time.time - parry.TimeLastParried <= parry.ParryWindow;
+        bool successful = parry != null && (Time.time - parry.TimeLastParried <= parry.ParryWindow
+            || (_projectile != null && _projectile.IsDroneShot && parry.isParrying));
+        if (successful) player.Heal(parry.ParryHealAmount);
+        return successful;
     }
 
     bool TryRegisterPlayerHit(LungeBehavior lungeEnemy, PunchingBehavior punchingEnemy)
