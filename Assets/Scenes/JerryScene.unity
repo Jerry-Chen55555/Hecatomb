@@ -3086,6 +3086,7 @@ MonoBehaviour:
     m_Flags: 0
     m_Priority: 0
   Shield: {fileID: 556815004}
+  PerfectParryVFX: {fileID: 6929464673248814274, guid: 66ac97632ad23412ea26e0576a976583, type: 3}
   isParrying: 0
   parrySuccess: 0
   ParryCooldown: 0.5

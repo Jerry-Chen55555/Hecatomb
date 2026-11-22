@@ -116,7 +116,10 @@ public class DetectHit : MonoBehaviour
             parry.RegisterParrySuccess();
 
         if (perfectParry)
+        {
+            parry.RegisterPerfectParry(transform.root.gameObject);
             player.Heal(parry.ParryHealAmount);
+        }
 
         return parried;
     }

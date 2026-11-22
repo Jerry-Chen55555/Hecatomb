@@ -8,12 +8,18 @@ public class ParryHandler : MonoBehaviour
     public float ParryWindow = 0.2f;
     public InputAction ParryAction;
     public GameObject Shield;
+    public GameObject PerfectParryVFX;
     public bool isParrying = false;
     public bool parrySuccess = false;
     public float ParryCooldown = 0.4f;
     public int ParryHealAmount = 20;
+
+    public float ParryOffset;
     private float _nextParryTime = 0f;
     private Coroutine _animateCoroutine;
+    private Coroutine _shakeCoroutine;
+    private Coroutine _pauseCoroutine;
+    private float _timeScaleBeforeParryPause;
 
     public void AllowQuickParry()
     {
@@ -28,7 +34,59 @@ public class ParryHandler : MonoBehaviour
         }
 
         parrySuccess = true;
+        ShakeCamera();
         StartParry();
+    }
+
+    public void RegisterPerfectParry(GameObject enemy)
+    {
+        Vector2 direction = ((Vector2)enemy.transform.position - (Vector2)transform.position).normalized;
+        Vector3 position = transform.position + (Vector3)(direction * ParryOffset);
+        Instantiate(PerfectParryVFX, position, Quaternion.identity);
+
+        if (_pauseCoroutine == null)
+        {
+            if (Time.timeScale <= 0f)
+                return;
+
+            _timeScaleBeforeParryPause = Time.timeScale;
+            Time.timeScale = 0f;
+            _pauseCoroutine = StartCoroutine(BriefPause());
+        }
+        else
+        {
+            StopCoroutine(_pauseCoroutine);
+            _pauseCoroutine = StartCoroutine(BriefPause());
+        }
+    }
+
+    private IEnumerator BriefPause()
+    {
+        yield return new WaitForSecondsRealtime(0.05f);
+        Time.timeScale = _timeScaleBeforeParryPause;
+        _pauseCoroutine = null;
+    }
+
+    private void ShakeCamera()
+    {
+        Camera camera = Camera.main;
+        if (camera == null) return;
+        if (_shakeCoroutine != null) StopCoroutine(_shakeCoroutine);
+        _shakeCoroutine = StartCoroutine(CameraShake(camera.transform));
+    }
+
+    private IEnumerator CameraShake(Transform cameraTransform)
+    {
+        Vector3 origin = cameraTransform.localPosition;
+        const float duration = 0.18f;
+        const float magnitude = 0.12f;
+        for (float elapsed = 0f; elapsed < duration; elapsed += Time.unscaledDeltaTime)
+        {
+            cameraTransform.localPosition = origin + (Vector3)(Random.insideUnitCircle * magnitude);
+            yield return null;
+        }
+        cameraTransform.localPosition = origin;
+        _shakeCoroutine = null;
     }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created

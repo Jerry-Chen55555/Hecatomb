@@ -173,6 +173,7 @@ public class DroneBehavior : MonoBehaviour, IDamageable
 
         Health -= amount;
         if (EnemyDamagedChannel != null) EnemyDamagedChannel.Raise(gameObject, amount);
+        EnemyVisualEffects.FlashOnHit(gameObject);
         if (Health > 0) return;
 
         _dead = true;

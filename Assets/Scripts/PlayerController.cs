@@ -58,7 +58,7 @@ public class PlayerController : MonoBehaviour
         UpdateHealthBar();
 
         int healedAmount = Health - previousHealth;
-        if (healedAmount > 0)
+        if (amount > 0)
             HealthHealed?.Invoke(healedAmount);
     }
 
