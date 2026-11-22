@@ -45,6 +45,7 @@ public sealed class EnemyEventListener : MonoBehaviour
     void OnDamage(GameObject target, int amount)
     {
         if (target != gameObject && target.transform.root.gameObject != gameObject) return;
+        SfxPlayer.Instance?.PlayEnemyHit();
         StartCoroutine(EnemyVisualEffects.WhiteFlash(GetComponentsInChildren<SpriteRenderer>(), 0.08f));
     }
 
@@ -65,6 +66,7 @@ public sealed class EnemyEventListener : MonoBehaviour
     void OnDeath(GameObject target, int unused)
     {
         if (target != gameObject && target.transform.root.gameObject != gameObject) return;
+        SfxPlayer.Instance?.PlayEnemyDeath();
         EnemyDeathFade fade = GetComponent<EnemyDeathFade>();
         if (fade == null) fade = gameObject.AddComponent<EnemyDeathFade>();
         if (fade is IEnemyDeath death) death.Die();

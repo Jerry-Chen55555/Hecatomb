@@ -52,6 +52,7 @@ public class SniperBehavior : MonoBehaviour, IDamageable
     private float _timer = 1f;
     private float _flashPhase;
     private float _nextRecoverTime;
+    private float _nextBeepPhase;
     private bool _stunned;
     private bool _dead;
 
@@ -120,6 +121,7 @@ public class SniperBehavior : MonoBehaviour, IDamageable
                 {
                     _state = SniperState.Charge;
                     _timer = ChargeTime;
+                    _nextBeepPhase = Mathf.Floor(_flashPhase) + 0.25f;
                 }
                 break;
             }
@@ -195,7 +197,13 @@ public class SniperBehavior : MonoBehaviour, IDamageable
         float flashSpan = Mathf.Max(ChargeTime - RedHoldTime - YellowFlashTime, 0.01f);
         float progress = Mathf.Clamp01((ChargeTime - _timer) / flashSpan);
 
+        float previousFlashPhase = _flashPhase;
         _flashPhase += Mathf.Lerp(MinFlashRate, MaxFlashRate, progress * progress) * Time.deltaTime;
+        while (previousFlashPhase < _nextBeepPhase && _flashPhase >= _nextBeepPhase)
+        {
+            SfxPlayer.Instance?.PlaySniperBeep();
+            _nextBeepPhase += 1f;
+        }
         float wave = 0.5f + 0.5f * Mathf.Sin(_flashPhase * 2f * Mathf.PI);
         float redAmount = Mathf.Clamp01(progress * 0.3f + wave * Mathf.Lerp(0.4f, 0.7f, progress));
 
@@ -206,6 +214,7 @@ public class SniperBehavior : MonoBehaviour, IDamageable
 
     void Fire()
     {
+        SfxPlayer.Instance?.PlaySniperShot();
         bool parried = _parry != null && _parry.isParrying;
         bool perfectParry = parried
             && Time.time - _parry.TimeLastParried >= 0f

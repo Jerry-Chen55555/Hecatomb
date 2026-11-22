@@ -64,7 +64,13 @@ public class PlayerController : MonoBehaviour
 
         int damageAmount = previousHealth - Health;
         if (damageAmount > 0)
+        {
             DamageTaken?.Invoke(damageAmount);
+            if (Health <= 0)
+                SfxPlayer.Instance?.PlayPlayerDeath();
+            else
+                SfxPlayer.Instance?.PlayPlayerHit();
+        }
     }
 
     void SetupHealthBar()

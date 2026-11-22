@@ -131,6 +131,7 @@ public class DroneBehavior : MonoBehaviour, IDamageable
 
             for (int i = 0; i < bullets && fired < BulletCount; i++)
             {
+                if (i == 0) SfxPlayer.Instance?.PlayEnemyShoot();
                 FireBullet();
                 fired++;
             }
