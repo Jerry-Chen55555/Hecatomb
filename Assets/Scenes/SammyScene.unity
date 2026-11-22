@@ -553,7 +553,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: bfdc3d5ef7b79474f83969c34ff5551f, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: '::'
 --- !u!114 &491947026
 MonoBehaviour:
@@ -565,7 +565,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a79441f348de89743a2939f4d699eac1, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: 
   m_RenderShadows: 1
   m_RequiresDepthTextureOption: 2
@@ -669,7 +669,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
   m_Material: {fileID: 0}
   m_Color: {r: 0, g: 0, b: 0, a: 1}
@@ -724,7 +724,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f9799bbe07ea64e3aa5c5eb48b20c0cf, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: '::'
 --- !u!4 &597300594
 Transform:
@@ -883,7 +883,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
   m_Material: {fileID: 0}
   m_Color: {r: 0.44608432, g: 0.972549, b: 0.14117645, a: 1}
@@ -997,7 +997,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: dc42784cf147c0c48a680349fa168899, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.GraphicRaycaster
   m_IgnoreReversedGraphics: 1
   m_BlockingObjects: 0
@@ -1014,7 +1014,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0cd44c1031e13a943bb63640046fad76, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.CanvasScaler
   m_UiScaleMode: 1
   m_ReferencePixelsPerUnit: 100
@@ -1154,7 +1154,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 073797afb82c5a1438f328866b10b3f0, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: 
   m_ComponentVersion: 3
   m_LightType: 4
@@ -1239,7 +1239,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 01614664b831546d2ae94a42149d80ac, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Unity.InputSystem::UnityEngine.InputSystem.UI.InputSystemUIInputModule
   m_SendPointerHoverToParent: 1
   m_MoveRepeatDelay: 0.5
@@ -1270,7 +1270,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 76c392e42b5098c458856cdf6ecaaaa1, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.EventSystems.EventSystem
   m_FirstSelected: {fileID: 0}
   m_sendNavigationEvents: 1
@@ -1571,6 +1571,7 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
+  - component: {fileID: 4972742295993193090}
   - component: {fileID: 2079113713}
   - component: {fileID: 2079113712}
   - component: {fileID: 2079113711}
@@ -1640,7 +1641,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7c374dd0d29be4676bbfa7fde272fbf8, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Assembly-CSharp::BasicAttack
   SlashPrefab: {fileID: 573093652658330078, guid: d018763d1f4b14cd4b7c7b032c5050fc, type: 3}
   Player: {fileID: 2079113707}
@@ -1657,7 +1658,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e91d67545d6104f5a8c5cb7a306f6a12, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: '::'
   TimeLastParried: 0
   ParryWindow: 0.2
@@ -1693,7 +1694,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 05c7184d153c84c49b6c700e2e4176cf, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Assembly-CSharp::PlayerController
   MoveAction:
     m_Name: Move
@@ -1747,6 +1748,7 @@ MonoBehaviour:
     m_Priority: 0
   MoveInput: {x: 0, y: 0}
   Speed: 10
+  PlayerHitChannel: {fileID: 11400000, guid: bcd57692c85b4950a3d1e4e42307ee3a, type: 2}
   Health: 100
 --- !u!212 &2079113712
 SpriteRenderer:
@@ -1838,3 +1840,20 @@ SceneRoots:
   - {fileID: 32229607}
   - {fileID: 300591161}
   - {fileID: 1224398347}
+
+--- !u!114 &4972742295993193090
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2079113707}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c014f7e4d6cb47cead7da46d21e6ceaf, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: Assembly-CSharp::EnemyEventListener
+  DamageRequestChannel: {fileID: 0}
+  DamageChannel: {fileID: 0}
+  PlayerHitChannel: {fileID: 11400000, guid: bcd57692c85b4950a3d1e4e42307ee3a, type: 2}
+  DeathChannel: {fileID: 0}

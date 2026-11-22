@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class MotorcycleBehavior : MonoBehaviour
+public class MotorcycleBehavior : MonoBehaviour, IDamageable
 {
     public float Speed = 8f;
     public float TurnRate = 150f;
@@ -15,6 +15,10 @@ public class MotorcycleBehavior : MonoBehaviour
     public float HitRadius = 0.8f;
     public float HitCooldown = 1f;
     public int Health = 120;
+    public EnemyEventChannel EnemyDamagedChannel;
+    public EnemyEventChannel EnemyDamageRequestChannel;
+    public EnemyEventChannel EnemyDiedChannel;
+    public EnemyEventChannel PlayerHitChannel;
 
     private Transform _player;
     private PlayerController _playerController;
@@ -27,6 +31,9 @@ public class MotorcycleBehavior : MonoBehaviour
 
     void Start()
     {
+        EnemyEventListener eventListener = GetComponent<EnemyEventListener>();
+        if (eventListener == null) eventListener = gameObject.AddComponent<EnemyEventListener>();
+        eventListener.ConfigureAll(EnemyDamageRequestChannel, EnemyDamagedChannel, null, EnemyDiedChannel);
         GameObject playerObject = GameObject.Find("Player");
         _player = playerObject.transform;
         _playerController = playerObject.GetComponent<PlayerController>();
@@ -96,7 +103,7 @@ public class MotorcycleBehavior : MonoBehaviour
             return;
         }
 
-        _playerController.TakeDamage(Damage);
+        if (PlayerHitChannel != null) PlayerHitChannel.Raise(_playerController.gameObject, Damage);
     }
 
     public void TakeDamage(int amount)
@@ -104,12 +111,11 @@ public class MotorcycleBehavior : MonoBehaviour
         if (_dead) return;
 
         Health -= amount;
+        if (EnemyDamagedChannel != null) EnemyDamagedChannel.Raise(gameObject, amount);
         if (Health > 0) return;
 
         _dead = true;
 
-        EnemyDeathFade fade = GetComponent<EnemyDeathFade>();
-        fade = gameObject.AddComponent<EnemyDeathFade>();
-        fade.Begin();
+        if (EnemyDiedChannel != null) EnemyDiedChannel.Raise(gameObject);
     }
 }

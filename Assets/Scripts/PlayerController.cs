@@ -5,6 +5,8 @@ using UnityEngine.SceneManagement;
 
 public class PlayerController : MonoBehaviour
 {
+    public EnemyEventChannel PlayerHitChannel;
+    private EnemyEventListener _eventListener;
     public event System.Action<int> DamageTaken;
     public event System.Action<int> HealthHealed;
 
@@ -21,6 +23,8 @@ public class PlayerController : MonoBehaviour
 
     void Start()
     {
+        _eventListener = GetComponent<EnemyEventListener>();
+        _eventListener.Configure(null, PlayerHitChannel, null);
         animator = GetComponent<Animator>();
         Invoke("StopAnimator", 0.75f);
 

@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class RangedBehavior : MonoBehaviour
+public class RangedBehavior : MonoBehaviour, IDamageable
 {
     public float MoveSpeed = 3f;
     public float Acceleration = 8f;
@@ -22,6 +22,10 @@ public class RangedBehavior : MonoBehaviour
     public float SpreadAngle = 4f;
     public int ProjectileDamage = 20;
     public int Health = 100;
+    public EnemyEventChannel EnemyDamagedChannel;
+    public EnemyEventChannel EnemyDamageRequestChannel;
+    public EnemyEventChannel EnemyDiedChannel;
+    public EnemyEventChannel PlayerHitChannel;
 
     private Rigidbody2D _rigidbody;
     private GameObject _player;
@@ -31,6 +35,9 @@ public class RangedBehavior : MonoBehaviour
 
     void Start()
     {
+        EnemyEventListener eventListener = GetComponent<EnemyEventListener>();
+        if (eventListener == null) eventListener = gameObject.AddComponent<EnemyEventListener>();
+        eventListener.ConfigureAll(EnemyDamageRequestChannel, EnemyDamagedChannel, null, EnemyDiedChannel);
         _rigidbody = GetComponent<Rigidbody2D>();
         _player = GameObject.Find("Player");
         DetectHit.IgnoreEnemyCollisions(gameObject);
@@ -112,11 +119,10 @@ public class RangedBehavior : MonoBehaviour
         }
 
         Health = Mathf.Max(0, Health - damageAmount);
+        if (EnemyDamagedChannel != null) EnemyDamagedChannel.Raise(gameObject, damageAmount);
         if (Health == 0)
         {
-            EnemyDeathFade fade = GetComponent<EnemyDeathFade>();
-            if (fade == null) fade = gameObject.AddComponent<EnemyDeathFade>();
-            fade.Begin();
+            if (EnemyDiedChannel != null) EnemyDiedChannel.Raise(gameObject);
         }
     }
 
