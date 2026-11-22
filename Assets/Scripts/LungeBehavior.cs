@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class LungeBehavior : MonoBehaviour
+public class LungeBehavior : MonoBehaviour, IDamageable, IEnemyPlayerHit
 {
     public float ApproachSpeed = 3f;
     public float AggroRange = 7f;
@@ -14,6 +14,10 @@ public class LungeBehavior : MonoBehaviour
     public float ChargeAcceleration = 150f;
     public Collider2D ChargeHitbox;
     public int Health = 100;
+    public EnemyEventChannel EnemyDamagedChannel;
+    public EnemyEventChannel EnemyDamageRequestChannel;
+    public EnemyEventChannel EnemyDiedChannel;
+    public EnemyEventChannel PlayerHitChannel;
     public float ChargePathWidth = 1f;
     public float ChargePathAlpha = 0.3f;
     public float ChargePathLineWidth = 0.045f;
@@ -49,6 +53,9 @@ public class LungeBehavior : MonoBehaviour
 
     void Start()
     {
+        EnemyEventListener eventListener = GetComponent<EnemyEventListener>();
+        if (eventListener == null) eventListener = gameObject.AddComponent<EnemyEventListener>();
+        eventListener.ConfigureAll(EnemyDamageRequestChannel, EnemyDamagedChannel, null, EnemyDiedChannel);
         _lungerRb = GetComponent<Rigidbody2D>();
         _sprites = GetComponentsInChildren<SpriteRenderer>();
         _player = GameObject.Find("Player");
@@ -246,11 +253,10 @@ public class LungeBehavior : MonoBehaviour
         }
 
         Health = Mathf.Max(0, Health - damageAmount);
+        if (EnemyDamagedChannel != null) EnemyDamagedChannel.Raise(gameObject, damageAmount);
         if (Health == 0)
         {
-            EnemyDeathFade fade = GetComponent<EnemyDeathFade>();
-            if (fade == null) fade = gameObject.AddComponent<EnemyDeathFade>();
-            fade.Begin();
+            if (EnemyDiedChannel != null) EnemyDiedChannel.Raise(gameObject);
         }
     }
 

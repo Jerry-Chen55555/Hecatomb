@@ -248,7 +248,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a79441f348de89743a2939f4d699eac1, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: 
   m_RenderShadows: 1
   m_RequiresDepthTextureOption: 2
@@ -358,7 +358,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: bfdc3d5ef7b79474f83969c34ff5551f, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: '::'
 --- !u!1 &619394800
 GameObject:
@@ -387,7 +387,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 073797afb82c5a1438f328866b10b3f0, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: 
   m_ComponentVersion: 3
   m_LightType: 4
@@ -452,6 +452,7 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
+  - component: {fileID: 6929126748590364756}
   - component: {fileID: 1909698750}
   - component: {fileID: 1909698749}
   - component: {fileID: 1909698751}
@@ -550,7 +551,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 05c7184d153c84c49b6c700e2e4176cf, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Assembly-CSharp::PlayerController
   MoveAction:
     m_Name: Move
@@ -604,6 +605,7 @@ MonoBehaviour:
     m_Priority: 0
   MoveInput: {x: 0, y: 0}
   Speed: 10
+  PlayerHitChannel: {fileID: 11400000, guid: bcd57692c85b4950a3d1e4e42307ee3a, type: 2}
   Health: 100
 --- !u!114 &1909698752
 MonoBehaviour:
@@ -615,7 +617,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e91d67545d6104f5a8c5cb7a306f6a12, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: '::'
   TimeLastParried: 0
   ParryAction:
@@ -646,7 +648,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7c374dd0d29be4676bbfa7fde272fbf8, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Assembly-CSharp::BasicAttack
   SlashPrefab: {fileID: 573093652658330078, guid: d018763d1f4b14cd4b7c7b032c5050fc, type: 3}
   Player: {fileID: 1909698748}
@@ -736,3 +738,20 @@ SceneRoots:
   - {fileID: 1909698750}
   - {fileID: 10438142}
   - {fileID: 7218391001}
+
+--- !u!114 &6929126748590364756
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1909698748}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c014f7e4d6cb47cead7da46d21e6ceaf, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: Assembly-CSharp::EnemyEventListener
+  DamageRequestChannel: {fileID: 0}
+  DamageChannel: {fileID: 0}
+  PlayerHitChannel: {fileID: 11400000, guid: bcd57692c85b4950a3d1e4e42307ee3a, type: 2}
+  DeathChannel: {fileID: 0}

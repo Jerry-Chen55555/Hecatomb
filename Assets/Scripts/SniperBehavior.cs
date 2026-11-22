@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class SniperBehavior : MonoBehaviour
+public class SniperBehavior : MonoBehaviour, IDamageable
 {
     public float StayBack = 9f;
     public float StayBackTolerance = 2f;
@@ -27,6 +27,10 @@ public class SniperBehavior : MonoBehaviour
     public float StunTime = 1.5f;
 
     public int Health = 80;
+    public EnemyEventChannel EnemyDamagedChannel;
+    public EnemyEventChannel EnemyDamageRequestChannel;
+    public EnemyEventChannel EnemyDiedChannel;
+    public EnemyEventChannel PlayerHitChannel;
 
     private enum SniperState 
     { 
@@ -53,6 +57,9 @@ public class SniperBehavior : MonoBehaviour
 
     void Start()
     {
+        EnemyEventListener eventListener = GetComponent<EnemyEventListener>();
+        if (eventListener == null) eventListener = gameObject.AddComponent<EnemyEventListener>();
+        eventListener.ConfigureAll(EnemyDamageRequestChannel, EnemyDamagedChannel, null, EnemyDiedChannel);
         GameObject playerObject = GameObject.Find("Player");
         _player = playerObject.transform;
         _playerController = playerObject.GetComponent<PlayerController>();
@@ -220,7 +227,7 @@ public class SniperBehavior : MonoBehaviour
         }
         else
         {
-            _playerController.TakeDamage(Damage);
+            if (PlayerHitChannel != null) PlayerHitChannel.Raise(_playerController.gameObject, Damage);
         }
     }
 
@@ -259,14 +266,13 @@ public class SniperBehavior : MonoBehaviour
         if (_dead) return;
 
         Health -= amount;
+        if (EnemyDamagedChannel != null) EnemyDamagedChannel.Raise(gameObject, amount);
         if (Health <= 0)
         {
             _dead = true;
             if (_line != null) _line.enabled = false;
 
-            EnemyDeathFade fade = GetComponent<EnemyDeathFade>();
-            if (fade == null) fade = gameObject.AddComponent<EnemyDeathFade>();
-            fade.Begin();
+            if (EnemyDiedChannel != null) EnemyDiedChannel.Raise(gameObject);
             return;
         }
 

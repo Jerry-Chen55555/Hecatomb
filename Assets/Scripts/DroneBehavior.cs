@@ -1,7 +1,7 @@
 using System.Collections;
 using UnityEngine;
 
-public class DroneBehavior : MonoBehaviour
+public class DroneBehavior : MonoBehaviour, IDamageable
 {
     public GameObject BulletPrefab;
     public float BulletSpeed = 10f;
@@ -27,6 +27,10 @@ public class DroneBehavior : MonoBehaviour
     public float TurnSpeed = 360f;
 
     public int Health = 100;
+    public EnemyEventChannel EnemyDamagedChannel;
+    public EnemyEventChannel EnemyDamageRequestChannel;
+    public EnemyEventChannel EnemyDiedChannel;
+    public EnemyEventChannel PlayerHitChannel;
 
     private Transform _player;
     private SpriteRenderer[] _sprites;
@@ -40,6 +44,9 @@ public class DroneBehavior : MonoBehaviour
 
     void Start()
     {
+        EnemyEventListener eventListener = GetComponent<EnemyEventListener>();
+        if (eventListener == null) eventListener = gameObject.AddComponent<EnemyEventListener>();
+        eventListener.ConfigureAll(EnemyDamageRequestChannel, EnemyDamagedChannel, null, EnemyDiedChannel);
         GameObject playerObject = GameObject.Find("Player");
         _player = playerObject.transform;
 
@@ -165,13 +172,12 @@ public class DroneBehavior : MonoBehaviour
         if (_dead) return;
 
         Health -= amount;
+        if (EnemyDamagedChannel != null) EnemyDamagedChannel.Raise(gameObject, amount);
         if (Health > 0) return;
 
         _dead = true;
         StopAllCoroutines();
 
-        EnemyDeathFade fade = GetComponent<EnemyDeathFade>();
-        if (fade == null) fade = gameObject.AddComponent<EnemyDeathFade>();
-        fade.Begin();
+        if (EnemyDiedChannel != null) EnemyDiedChannel.Raise(gameObject);
     }
 }
