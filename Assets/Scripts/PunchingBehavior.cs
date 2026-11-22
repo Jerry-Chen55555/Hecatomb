@@ -188,6 +188,7 @@ public class PunchingBehavior : MonoBehaviour
         }
 
         Health = Mathf.Max(0, Health - damageAmount);
+        EnemyVisualEffects.FlashOnHit(gameObject);
         if (Health == 0)
         {
             EnemyDeathFade fade = GetComponent<EnemyDeathFade>();

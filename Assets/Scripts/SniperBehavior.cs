@@ -215,7 +215,10 @@ public class SniperBehavior : MonoBehaviour
         {
             _parry.RegisterParrySuccess();
             if (perfectParry)
+            {
+                _parry.RegisterPerfectParry(gameObject);
                 _playerController.Heal(_parry.ParryHealAmount);
+            }
             TakeDamage(ParryReflectDamage);
         }
         else
@@ -259,6 +262,7 @@ public class SniperBehavior : MonoBehaviour
         if (_dead) return;
 
         Health -= amount;
+        EnemyVisualEffects.FlashOnHit(gameObject);
         if (Health <= 0)
         {
             _dead = true;

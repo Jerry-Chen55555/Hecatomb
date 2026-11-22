@@ -91,7 +91,10 @@ public class MotorcycleBehavior : MonoBehaviour
         {
             _parry.RegisterParrySuccess();
             if (perfectParry)
+            {
+                _parry.RegisterPerfectParry(gameObject);
                 _playerController.Heal(_parry.ParryHealAmount);
+            }
             TakeDamage(999);
             return;
         }
@@ -104,6 +107,7 @@ public class MotorcycleBehavior : MonoBehaviour
         if (_dead) return;
 
         Health -= amount;
+        EnemyVisualEffects.FlashOnHit(gameObject);
         if (Health > 0) return;
 
         _dead = true;

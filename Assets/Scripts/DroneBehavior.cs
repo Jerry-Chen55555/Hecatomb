@@ -165,6 +165,7 @@ public class DroneBehavior : MonoBehaviour
         if (_dead) return;
 
         Health -= amount;
+        EnemyVisualEffects.FlashOnHit(gameObject);
         if (Health > 0) return;
 
         _dead = true;
