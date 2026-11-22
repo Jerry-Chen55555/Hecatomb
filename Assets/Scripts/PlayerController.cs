@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using TMPro;
 
 public class PlayerController : MonoBehaviour
 {
@@ -16,6 +17,7 @@ public class PlayerController : MonoBehaviour
     public int Health = 100;
     public int MaxHealth = 100;
     public GameObject GameOverScreen;
+    public TMP_Text GameOverTitle;
     public Image HealthFill;
     private Animator animator;
     private bool _isDead;
@@ -87,9 +89,24 @@ public class PlayerController : MonoBehaviour
 
     private void GameOver()
     {
+        if (_isDead) return;
         _isDead = true;
         MoveAction.Disable();
         Time.timeScale = 0f;
+        if (GameOverTitle != null)
+            GameOverTitle.text = "You Lose";
+        if (GameOverScreen != null)
+            GameOverScreen.SetActive(true);
+    }
+
+    public void WinGame()
+    {
+        if (_isDead) return;
+        _isDead = true;
+        MoveAction.Disable();
+        Time.timeScale = 0f;
+        if (GameOverTitle != null)
+            GameOverTitle.text = "You Win";
         if (GameOverScreen != null)
             GameOverScreen.SetActive(true);
     }
