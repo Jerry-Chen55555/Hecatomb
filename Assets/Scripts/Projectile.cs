@@ -8,8 +8,10 @@ public class Projectile : MonoBehaviour
     private Rigidbody2D _projectileRigidbody;
     private int _damage;
     private Transform _target;
+    private bool _reflected;
 
     public int Damage => _damage;
+    public bool IsReflected => _reflected;
 
     void Awake()
     {
@@ -27,6 +29,7 @@ public class Projectile : MonoBehaviour
 
     void FixedUpdate()
     {
+        if (_reflected) return;
         Vector2 velocity = _projectileRigidbody.linearVelocity;
         float speed = velocity.magnitude;
         Vector2 toTarget = (Vector2)_target.position - _projectileRigidbody.position;
@@ -48,5 +51,20 @@ public class Projectile : MonoBehaviour
     public void Despawn()
     {
         Destroy(gameObject);
+    }
+
+    public void Reflect(Vector2 direction)
+    {
+        _reflected = true;
+        _target = null;
+        if (direction.sqrMagnitude < 0.001f) direction = Vector2.right;
+        _projectileRigidbody.linearVelocity = direction.normalized * _projectileRigidbody.linearVelocity.magnitude;
+        transform.SetParent(null, true);
+        Collider2D projectileCollider = GetComponent<Collider2D>();
+        foreach (Collider2D enemyCollider in FindObjectsOfType<Collider2D>())
+        {
+            if (enemyCollider.transform.root.CompareTag("Enemy"))
+                Physics2D.IgnoreCollision(projectileCollider, enemyCollider, false);
+        }
     }
 }

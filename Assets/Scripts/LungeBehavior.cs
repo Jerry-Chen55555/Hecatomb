@@ -45,10 +45,12 @@ public class LungeBehavior : MonoBehaviour
     private bool _hasDamagedPlayerThisCharge;
     private LineRenderer _chargePathIndicator;
     private Material _chargePathMaterial;
+    private SpriteRenderer[] _sprites;
 
     void Start()
     {
         _lungerRb = GetComponent<Rigidbody2D>();
+        _sprites = GetComponentsInChildren<SpriteRenderer>();
         _player = GameObject.Find("Player");
         CreateChargePathIndicator();
         DetectHit.IgnoreEnemyCollisions(gameObject);
@@ -87,6 +89,7 @@ public class LungeBehavior : MonoBehaviour
                 {
                     _currentState = LungeState.Retreat;
                     _stateTimer = RetreatDuration;
+                    StartCoroutine(EnemyVisualEffects.WhiteFlash(_sprites, RetreatDuration));
                 }
                 break;
 
@@ -245,7 +248,9 @@ public class LungeBehavior : MonoBehaviour
         Health = Mathf.Max(0, Health - damageAmount);
         if (Health == 0)
         {
-            Destroy(gameObject);
+            EnemyDeathFade fade = GetComponent<EnemyDeathFade>();
+            if (fade == null) fade = gameObject.AddComponent<EnemyDeathFade>();
+            fade.Begin();
         }
     }
 

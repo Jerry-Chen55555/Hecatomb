@@ -18,7 +18,7 @@ public class RangedBehavior : MonoBehaviour
 
     public float ShootRange = 10f;
     public float FireInterval = 3f;
-    public float ProjectileSpeed = 12f;
+    public float ProjectileSpeed = 10f;
     public float SpreadAngle = 4f;
     public int ProjectileDamage = 1;
     public int Health = 100;
@@ -114,7 +114,9 @@ public class RangedBehavior : MonoBehaviour
         Health = Mathf.Max(0, Health - damageAmount);
         if (Health == 0)
         {
-            Destroy(gameObject);
+            EnemyDeathFade fade = GetComponent<EnemyDeathFade>();
+            if (fade == null) fade = gameObject.AddComponent<EnemyDeathFade>();
+            fade.Begin();
         }
     }
 

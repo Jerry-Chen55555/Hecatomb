@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class DetectHit : MonoBehaviour
 {
@@ -24,8 +25,15 @@ public class DetectHit : MonoBehaviour
         PunchingBehavior punchingAttacker = GetComponentInParent<PunchingBehavior>();
         bool isProjectile = _projectile != null;
 
-        if (isProjectile && touchedEnemy)
+        if (isProjectile && touchedEnemy && !_projectile.IsReflected)
         {
+            return;
+        }
+
+        if (isProjectile && touchedEnemy && _projectile.IsReflected)
+        {
+            other.transform.root.SendMessage("TakeDamage", Mathf.Max(_projectile.Damage, 100), SendMessageOptions.DontRequireReceiver);
+            _projectile.Despawn();
             return;
         }
 
@@ -33,12 +41,24 @@ public class DetectHit : MonoBehaviour
         {
             if (isProjectile)
             {
+                if (TryParry(player))
+                {
+                    Vector2 aim = Camera.main != null
+                        ? (Vector2)Camera.main.ScreenToWorldPoint(Mouse.current.position.ReadValue()) - (Vector2)player.transform.position
+                        : (Vector2)transform.position - (Vector2)player.transform.position;
+                    _projectile.Reflect(aim);
+                    return;
+                }
                 player.Health = Mathf.Max(0, player.Health - _projectile.Damage);
                 _projectile.Despawn();
             }
             else if (TryRegisterPlayerHit(lungeAttacker, punchingAttacker))
             {
-                player.Health = Mathf.Max(0, player.Health - Damage);
+                if (TryParry(player))
+                {
+                    transform.root.SendMessage("TakeDamage", 999999, SendMessageOptions.DontRequireReceiver);
+                }
+                else player.Health = Mathf.Max(0, player.Health - Damage);
             }
 
             return;
@@ -59,6 +79,12 @@ public class DetectHit : MonoBehaviour
         {
             other.transform.root.SendMessage("TakeDamage", Damage, SendMessageOptions.DontRequireReceiver);
         }
+    }
+
+    bool TryParry(PlayerController player)
+    {
+        ParryHandler parry = player.GetComponent<ParryHandler>();
+        return parry != null && Time.time - parry.TimeLastParried <= parry.ParryWindow;
     }
 
     bool TryRegisterPlayerHit(LungeBehavior lungeEnemy, PunchingBehavior punchingEnemy)
