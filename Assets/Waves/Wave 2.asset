@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Wave 2
   m_EditorClassIdentifier: Assembly-CSharp::WaveData
   subwaves:
-  - enemyPrefab: {fileID: 0}
-    enemyCount: 0
-    spawnInterval: 0
-    delayAfter: 0
+  - enemyPrefab: {fileID: 3648205875574225530, guid: 745443506c57a634a9bccab00dcc8f30, type: 3}
+    enemyCount: 3
+    spawnInterval: 5
+    delayAfter: 3

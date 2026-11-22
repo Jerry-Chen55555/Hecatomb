@@ -15,5 +15,5 @@ MonoBehaviour:
   subwaves:
   - enemyPrefab: {fileID: 3648205875574225530, guid: 8a645116698a4b16a314aa769c8a688a, type: 3}
     enemyCount: 5
-    spawnInterval: 5
+    spawnInterval: 3.5
     delayAfter: 3

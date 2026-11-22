@@ -3273,6 +3273,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::WaveSystem
   waves:
   - {fileID: 11400000, guid: e968299c8ec6f480ba75841214678d54, type: 2}
+  - {fileID: 11400000, guid: 6749ae8264d0b41fe8e59684ffea6881, type: 2}
+  - {fileID: 11400000, guid: a3d363464d3564269b0cbc9f22e8caa1, type: 2}
+  - {fileID: 11400000, guid: 59043530e1d614e45812edee7369dcf9, type: 2}
+  - {fileID: 11400000, guid: 63648131904544a4ba1b82dfc6fe4e73, type: 2}
+  - {fileID: 11400000, guid: 033158337962a4452abef47600f25ddc, type: 2}
+  - {fileID: 11400000, guid: 7e9ab7dc32f5d4e2d9b7787679cb409d, type: 2}
+  - {fileID: 11400000, guid: 1bda34912dc554b5798aaa1ae87d6bde, type: 2}
+  - {fileID: 11400000, guid: 83b6d3c364e0d4e30bfc8516e97a3edf, type: 2}
+  - {fileID: 11400000, guid: 6813441f1ee21464fbb9dfb101379325, type: 2}
   waveCounter: {fileID: 609765337}
   timeBetweenWaves: 2
   spawnArea: {x: 8, y: 4}
