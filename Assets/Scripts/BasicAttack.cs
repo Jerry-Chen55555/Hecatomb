@@ -43,7 +43,7 @@ public class BasicAttack : MonoBehaviour
         slash.transform.SetParent(Player.transform);
         if (_leftHand)
         {
-            slash.transform.localScale = new Vector3(-2, 2, 2);
+            slash.transform.localScale = new Vector3(-1.5f, 1.5f, 1.5f);
         }
 
         _leftHand = !_leftHand;
