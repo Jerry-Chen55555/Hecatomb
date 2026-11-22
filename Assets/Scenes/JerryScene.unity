@@ -1089,7 +1089,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::BasicAttack
   SlashPrefab: {fileID: 573093652658330078, guid: d018763d1f4b14cd4b7c7b032c5050fc, type: 3}
   Player: {fileID: 1909698748}
-  SlashCooldown: 0.05
+  SlashCooldown: 0.2
   SlashOffset: 1
   cameraMain: {fileID: 519420031}
 --- !u!1001 &2094845433
