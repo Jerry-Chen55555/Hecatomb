@@ -33,23 +33,21 @@ public class RangedBehavior : MonoBehaviour
     {
         _rigidbody = GetComponent<Rigidbody2D>();
         _player = GameObject.Find("Player");
+        DetectHit.IgnoreEnemyCollisions(gameObject);
 
-        if (_player != null)
+        Collider2D[] enemyColliders = GetComponentsInChildren<Collider2D>();
+        Collider2D[] playerColliders = _player.GetComponentsInChildren<Collider2D>();
+
+        foreach (Collider2D enemyCollider in enemyColliders)
         {
-            Collider2D[] enemyColliders = GetComponentsInChildren<Collider2D>();
-            Collider2D[] playerColliders = _player.GetComponentsInChildren<Collider2D>();
-
-            foreach (Collider2D enemyCollider in enemyColliders)
+            if (enemyCollider.isTrigger)
             {
-                if (enemyCollider.isTrigger)
-                {
-                    continue;
-                }
+                continue;
+            }
 
-                foreach (Collider2D playerCollider in playerColliders)
-                {
-                    Physics2D.IgnoreCollision(enemyCollider, playerCollider);
-                }
+            foreach (Collider2D playerCollider in playerColliders)
+            {
+                Physics2D.IgnoreCollision(enemyCollider, playerCollider);
             }
         }
 
@@ -59,11 +57,6 @@ public class RangedBehavior : MonoBehaviour
 
     void FixedUpdate()
     {
-        if (_player == null || _rigidbody == null)
-        {
-            return;
-        }
-
         float deltaTime = Time.fixedDeltaTime;
         Vector2 toPlayer = (Vector2)_player.transform.position - _rigidbody.position;
         float distance = toPlayer.magnitude;
@@ -127,20 +120,12 @@ public class RangedBehavior : MonoBehaviour
 
     void Shoot(Vector2 direction)
     {
-        if (ProjectilePrefab == null)
-        {
-            return;
-        }
-
         float angle = Random.Range(-SpreadAngle, SpreadAngle);
         Vector2 shotDirection = Quaternion.Euler(0f, 0f, angle) * direction;
         Vector3 spawnPosition = FirePoint != null ? FirePoint.position : transform.position;
         GameObject shot = Instantiate(ProjectilePrefab, spawnPosition, Quaternion.identity, transform);
 
         Projectile projectile = shot.GetComponent<Projectile>();
-        if (projectile != null)
-        {
-            projectile.Init(shotDirection, ProjectileSpeed, ProjectileDamage);
-        }
+        projectile.Init(shotDirection, ProjectileSpeed, ProjectileDamage);
     }
 }
