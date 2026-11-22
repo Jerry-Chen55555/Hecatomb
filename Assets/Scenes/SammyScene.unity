@@ -1133,12 +1133,12 @@ MonoBehaviour:
   enemyDeath: {fileID: 8300000, guid: b266ba41d3dc3a74487ad174fe5c1b75, type: 3}
   enemyShoot: {fileID: 8300000, guid: 39f4fc84da13d954e847d28777e12e56, type: 3}
   parry: {fileID: 8300000, guid: 66de650d6f6164f469d2a675e4ffd125, type: 3}
-  bikeEngineLoop: {fileID: 0}
-  bikeHit: {fileID: 0}
-  bikeParried: {fileID: 0}
-  bikeRev: {fileID: 0}
-  sniperBeep: {fileID: 0}
-  sniperShot: {fileID: 0}
+  bikeEngineLoop: {fileID: 8300000, guid: 6fb604383cf300845990ff66d5a8eed4, type: 3}
+  bikeHit: {fileID: 8300000, guid: 77409d11d76214c42a391538d2ec2648, type: 3}
+  bikeParried: {fileID: 8300000, guid: 0c08514c6af60c84ca4e3a32189795cf, type: 3}
+  bikeRev: {fileID: 8300000, guid: fa4e2174ac4879048bcaf20e81268546, type: 3}
+  sniperBeep: {fileID: 8300000, guid: 7b9bc72e5c65dbe4bb97c9358230ea48, type: 3}
+  sniperShot: {fileID: 8300000, guid: 34b23a85d2730a04ba64bb33613f1e88, type: 3}
 --- !u!4 &1082021910
 Transform:
   m_ObjectHideFlags: 0
@@ -1868,10 +1868,12 @@ MonoBehaviour:
     m_Flags: 0
     m_Priority: 0
   Shield: {fileID: 321300821}
+  PerfectParryVFX: {fileID: 0}
   isParrying: 0
   parrySuccess: 0
   ParryCooldown: 0.5
   ParryHealAmount: 20
+  ParryOffset: 0
 --- !u!114 &2079113711
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1939,6 +1941,8 @@ MonoBehaviour:
   Speed: 10
   Health: 100
   MaxHealth: 100
+  GameOverScreen: {fileID: 0}
+  HealthFill: {fileID: 0}
 --- !u!212 &2079113712
 SpriteRenderer:
   serializedVersion: 2

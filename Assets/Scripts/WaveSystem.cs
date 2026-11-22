@@ -30,6 +30,10 @@ public class WaveSystem : MonoBehaviour
 
         if (waveCounter != null)
             waveCounter.text = $"Wave {waves.Count} Complete";
+
+        PlayerController player = FindFirstObjectByType<PlayerController>();
+        if (player != null)
+            player.WinGame();
     }
 
     private IEnumerator SpawnWave(WaveData wave)
