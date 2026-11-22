@@ -65,7 +65,7 @@ public class PlayerController : MonoBehaviour
 
     void SetupHealthBar()
     {
-        foreach (Image image in FindObjectsOfType<Image>())
+        foreach (Image image in FindObjectsByType<Image>(FindObjectsSortMode.None))
         {
             if (image.gameObject.name == "HealthRemaining")
             {
@@ -74,16 +74,13 @@ public class PlayerController : MonoBehaviour
             }
         }
 
-        if (_healthFill == null)
-        {
-            Debug.LogWarning("PlayerController: no Image named 'HealthRemaining' found, so the health bar won't update.");
-            return;
-        }
-
         if (_healthFill.sprite == null)
         {
             Texture2D white = Texture2D.whiteTexture;
-            _healthFill.sprite = Sprite.Create(white, new Rect(0, 0, white.width, white.height), new Vector2(0.5f, 0.5f));
+            _healthFill.sprite = Sprite.Create(
+                white,
+                new Rect(0, 0, white.width, white.height),
+                new Vector2(0.5f, 0.5f));
         }
 
         _healthFill.type = Image.Type.Filled;
@@ -93,7 +90,6 @@ public class PlayerController : MonoBehaviour
 
     void UpdateHealthBar()
     {
-        if (_healthFill != null)
-            _healthFill.fillAmount = MaxHealth > 0 ? (float)Health / MaxHealth : 0f;
+        _healthFill.fillAmount = MaxHealth > 0 ? (float)Health / MaxHealth : 0f;
     }
 }

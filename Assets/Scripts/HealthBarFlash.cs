@@ -7,9 +7,15 @@ public class HealthBarFlash : MonoBehaviour
     public PlayerController Player;
     public Image HealthBar;
     public SpriteRenderer TilingBackground;
+    private Coroutine _healthBarFlashCoroutine;
+    private Coroutine _tilingBackgroundFlashCoroutine;
+    private Color _healthBarOriginalColor;
+    private Color _tilingBackgroundOriginalColor;
 
     private void OnEnable()
     {
+        _healthBarOriginalColor = HealthBar.color;
+        _tilingBackgroundOriginalColor = TilingBackground.color;
         Player.DamageTaken += FlashHealthBarRed;
         Player.HealthHealed += FlashHealthBarBlue;
     }
@@ -22,38 +28,46 @@ public class HealthBarFlash : MonoBehaviour
 
     private void FlashHealthBarRed(int amount)
     {
-        StartCoroutine(FlashHealthBar(Color.red));
+        if (_healthBarFlashCoroutine != null)
+            StopCoroutine(_healthBarFlashCoroutine);
+
+        _healthBarFlashCoroutine = StartCoroutine(FlashHealthBar(Color.red));
     }
 
     private void FlashHealthBarBlue(int amount)
     {
-        StartCoroutine(FlashHealthBar(new Color(0f, 1f, 1f)));
-        StartCoroutine(FlashTilingBackground());
+        if (_healthBarFlashCoroutine != null)
+            StopCoroutine(_healthBarFlashCoroutine);
+        if (_tilingBackgroundFlashCoroutine != null)
+            StopCoroutine(_tilingBackgroundFlashCoroutine);
+
+        _healthBarFlashCoroutine = StartCoroutine(FlashHealthBar(new Color(0f, 1f, 1f)));
+        _tilingBackgroundFlashCoroutine = StartCoroutine(FlashTilingBackground());
     }
 
     private IEnumerator FlashHealthBar(Color flashColor)
     {
-        Color originalColor = HealthBar.color;
-
         for (int frame = 0; frame <= 30; frame++)
         {
             float progress = frame / 30f;
-            HealthBar.color = Color.Lerp(flashColor, originalColor, progress);
+            HealthBar.color = Color.Lerp(flashColor, _healthBarOriginalColor, progress);
             yield return new WaitForSeconds(1f / 60f);
         }
 
-        HealthBar.color = originalColor;
+        HealthBar.color = _healthBarOriginalColor;
+        _healthBarFlashCoroutine = null;
     }
 
     private IEnumerator FlashTilingBackground()
     {
-        Color originalColor = TilingBackground.color;
-
         for (int frame = 0; frame <= 30; frame++)
         {
             float progress = frame / 30f;
-            TilingBackground.color = Color.Lerp(new Color(0f, 1f, 1f), originalColor, progress);
+            TilingBackground.color = Color.Lerp(new Color(0f, 1f, 1f), _tilingBackgroundOriginalColor, progress);
             yield return new WaitForSeconds(1f / 60f);
         }
+
+        TilingBackground.color = _tilingBackgroundOriginalColor;
+        _tilingBackgroundFlashCoroutine = null;
     }
 }

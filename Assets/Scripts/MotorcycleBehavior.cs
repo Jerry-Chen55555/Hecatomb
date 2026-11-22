@@ -83,10 +83,15 @@ public class MotorcycleBehavior : MonoBehaviour
     {
         _hitTimer = HitCooldown;
 
-        bool parried = _parry != null && Time.time - _parry.TimeLastParried <= _parry.ParryWindow;
+        bool parried = _parry != null && _parry.isParrying;
+        bool perfectParry = parried
+            && Time.time - _parry.TimeLastParried >= 0f
+            && Time.time - _parry.TimeLastParried <= _parry.ParryWindow;
         if (parried)
         {
-            _playerController.Heal(_parry.ParryHealAmount);
+            _parry.RegisterParrySuccess();
+            if (perfectParry)
+                _playerController.Heal(_parry.ParryHealAmount);
             TakeDamage(999);
             return;
         }

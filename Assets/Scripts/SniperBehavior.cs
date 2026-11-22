@@ -199,7 +199,10 @@ public class SniperBehavior : MonoBehaviour
 
     void Fire()
     {
-        bool parried = _parry != null && Time.time - _parry.TimeLastParried <= _parry.ParryWindow;
+        bool parried = _parry != null && _parry.isParrying;
+        bool perfectParry = parried
+            && Time.time - _parry.TimeLastParried >= 0f
+            && Time.time - _parry.TimeLastParried <= _parry.ParryWindow;
 
         _fireEnd = _player.position;
         _fireColor = parried ? Color.cyan : Color.white;
@@ -210,7 +213,9 @@ public class SniperBehavior : MonoBehaviour
 
         if (parried)
         {
-            _playerController.Heal(_parry.ParryHealAmount);
+            _parry.RegisterParrySuccess();
+            if (perfectParry)
+                _playerController.Heal(_parry.ParryHealAmount);
             TakeDamage(ParryReflectDamage);
         }
         else

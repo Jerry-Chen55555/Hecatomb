@@ -183,7 +183,7 @@ SpriteRenderer:
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: -1
   m_MaskInteraction: 0
   m_Sprite: {fileID: 6493824449172928165, guid: 69b0fcd6dc39b4dc5892369b4f3f5a99, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -1327,9 +1327,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7e82df88412a4f0c9bc4a7d0d5d26a61, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::HealthBarFlash
-  player: {fileID: 1909698751}
-  healthBar: {fileID: 1767406449}
-  tilingBackground: {fileID: 2037477525}
+  Player: {fileID: 1909698751}
+  HealthBar: {fileID: 1767406449}
+  TilingBackground: {fileID: 2037477525}
 --- !u!1 &1280526700
 GameObject:
   m_ObjectHideFlags: 0
@@ -1571,6 +1571,63 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
+--- !u!1001 &1603472025
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 1118971840390732557, guid: 745443506c57a634a9bccab00dcc8f30, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 12.55014
+      objectReference: {fileID: 0}
+    - target: {fileID: 1118971840390732557, guid: 745443506c57a634a9bccab00dcc8f30, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 1.36833
+      objectReference: {fileID: 0}
+    - target: {fileID: 1118971840390732557, guid: 745443506c57a634a9bccab00dcc8f30, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1118971840390732557, guid: 745443506c57a634a9bccab00dcc8f30, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1118971840390732557, guid: 745443506c57a634a9bccab00dcc8f30, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1118971840390732557, guid: 745443506c57a634a9bccab00dcc8f30, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1118971840390732557, guid: 745443506c57a634a9bccab00dcc8f30, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1118971840390732557, guid: 745443506c57a634a9bccab00dcc8f30, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1118971840390732557, guid: 745443506c57a634a9bccab00dcc8f30, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1118971840390732557, guid: 745443506c57a634a9bccab00dcc8f30, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3648205875574225530, guid: 745443506c57a634a9bccab00dcc8f30, type: 3}
+      propertyPath: m_Name
+      value: LungingEnemy
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 745443506c57a634a9bccab00dcc8f30, type: 3}
 --- !u!1 &1622976963
 GameObject:
   m_ObjectHideFlags: 0
@@ -2313,3 +2370,4 @@ SceneRoots:
   - {fileID: 980970639}
   - {fileID: 1167715898}
   - {fileID: 698721313}
+  - {fileID: 1603472025}
