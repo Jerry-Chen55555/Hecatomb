@@ -85,7 +85,7 @@ SpriteRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: 21300000, guid: c7d2da86d030f4a68971a0432a0fea1a, type: 3}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0.4245283, g: 0.4245283, b: 0.4245283, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -134,10 +134,26 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SniperBehavior
   StayBack: 9
-  ChargeTime: 3
+  StayBackTolerance: 2
+  MoveSpeed: 3
+  Acceleration: 6
+  TurnSpeed: 360
+  FacePlayer: 1
   Damage: 60
-  Health: 80
   FireRange: 20
+  AcquireTime: 0.8
+  ChargeTime: 3
+  RedHoldTime: 0.15
+  YellowFlashTime: 0.2
+  FireFlashTime: 0.12
+  ReloadTime: 2.5
+  MinFlashRate: 1.5
+  MaxFlashRate: 14
+  StartWidth: 0.03
+  EndWidth: 0.09
+  ParryReflectDamage: 80
+  StunTime: 1.5
+  Health: 80
 --- !u!61 &5600056412158359404
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -176,7 +192,7 @@ BoxCollider2D:
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 3, y: 3}
+    oldSize: {x: 2, y: 2}
     newSize: {x: 1, y: 1}
     adaptiveTilingThreshold: 0.5
     drawMode: 0

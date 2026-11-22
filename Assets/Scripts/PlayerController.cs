@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class PlayerController : MonoBehaviour
 {
@@ -12,8 +13,10 @@ public class PlayerController : MonoBehaviour
     public float Speed = 10.0f;
     public int Health = 100;
     public int MaxHealth = 100;
+    public GameObject GameOverScreen;
     private Image _healthFill;
     private Animator animator;
+    private bool _isDead;
 
 
     void Start()
@@ -34,6 +37,9 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
+        if (_isDead)
+            return;
+
         Health = Mathf.Clamp(Health, 0, MaxHealth);
         UpdateHealthBar();
         MoveInput = MoveAction.ReadValue<Vector2>();
@@ -54,6 +60,9 @@ public class PlayerController : MonoBehaviour
 
     public void TakeDamage(int amount)
     {
+        if (_isDead)
+            return;
+
         int previousHealth = Health;
         Health = Mathf.Clamp(Health - Mathf.Max(0, amount), 0, MaxHealth);
         UpdateHealthBar();
@@ -61,6 +70,30 @@ public class PlayerController : MonoBehaviour
         int damageAmount = previousHealth - Health;
         if (damageAmount > 0)
             DamageTaken?.Invoke(damageAmount);
+
+        if (Health <= 0)
+            GameOver();
+    }
+
+    private void GameOver()
+    {
+        _isDead = true;
+        MoveAction.Disable();
+        Time.timeScale = 0f;
+        if (GameOverScreen != null)
+            GameOverScreen.SetActive(true);
+    }
+
+    public void RestartGame()
+    {
+        Time.timeScale = 1f;
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+    }
+
+    public void ReturnToMenu()
+    {
+        Time.timeScale = 1f;
+        SceneManager.LoadScene("MainMenu");
     }
 
     void SetupHealthBar()

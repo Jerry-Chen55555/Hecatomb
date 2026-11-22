@@ -276,11 +276,13 @@ MonoBehaviour:
   Acceleration: 18
   AttackRange: 1.2
   PunchCooldown: 2
-  PunchDuration: 0.32
-  PunchHitDelay: 0.26
-  TelegraphDuration: 0.18
+  TelegraphDuration: 0.3
   PullbackSpeed: 7
+  PunchDuration: 0.32
   PunchLungeSpeed: 8
+  PunchAcceleration: 90
+  HitWindow: 0.12
+  RecoveryDuration: 0.4
   TurnSpeed: 360
   PunchHitbox: {fileID: 753941885}
   Health: 100
