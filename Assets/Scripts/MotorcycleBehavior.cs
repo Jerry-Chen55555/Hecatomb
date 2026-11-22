@@ -28,6 +28,7 @@ public class MotorcycleBehavior : MonoBehaviour, IDamageable
     private float _commitTimer;
     private float _hitTimer;
     private bool _dead;
+    private AudioSource _engineAudioSource;
 
     void Start()
     {
@@ -43,6 +44,8 @@ public class MotorcycleBehavior : MonoBehaviour, IDamageable
         if (toPlayer.sqrMagnitude > 0.0001f) _heading = toPlayer.normalized;
 
         _currentSpeed = Speed;
+        _engineAudioSource = gameObject.AddComponent<AudioSource>();
+        SfxPlayer.Instance?.StartBikeEngine(_engineAudioSource);
     }
 
     void Update()
@@ -71,6 +74,7 @@ public class MotorcycleBehavior : MonoBehaviour, IDamageable
             if (distance <= CommitDistance && offAngle <= CommitAngle)
             {
                 _commitTimer = CommitTime;
+                SfxPlayer.Instance?.PlayBikeRev();
             }
         }
 
@@ -96,6 +100,7 @@ public class MotorcycleBehavior : MonoBehaviour, IDamageable
             && Time.time - _parry.TimeLastParried <= _parry.ParryWindow;
         if (parried)
         {
+            SfxPlayer.Instance?.PlayBikeParried();
             _parry.RegisterParrySuccess();
             if (perfectParry)
             {
@@ -106,6 +111,7 @@ public class MotorcycleBehavior : MonoBehaviour, IDamageable
             return;
         }
 
+        SfxPlayer.Instance?.PlayBikeHit();
         if (PlayerHitChannel != null) PlayerHitChannel.Raise(_playerController.gameObject, Damage);
     }
 
@@ -119,6 +125,7 @@ public class MotorcycleBehavior : MonoBehaviour, IDamageable
         if (Health > 0) return;
 
         _dead = true;
+        SfxPlayer.Instance?.StopBikeEngine(_engineAudioSource);
 
         if (EnemyDiedChannel != null) EnemyDiedChannel.Raise(gameObject);
     }

@@ -129,6 +129,7 @@ public class RangedBehavior : MonoBehaviour, IDamageable
 
     void Shoot(Vector2 direction)
     {
+        SfxPlayer.Instance?.PlayEnemyShoot();
         float angle = Random.Range(-SpreadAngle, SpreadAngle);
         Vector2 shotDirection = Quaternion.Euler(0f, 0f, angle) * direction;
         Vector3 spawnPosition = FirePoint != null ? FirePoint.position : transform.position;
