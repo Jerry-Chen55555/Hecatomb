@@ -5,6 +5,7 @@ using System.Collections;
 public class ParryHandler : MonoBehaviour
 {
     public float TimeLastParried;
+    public float ParryWindow = 0.2f;
     public InputAction ParryAction;
     public GameObject Shield;
     public bool isParrying = false;
