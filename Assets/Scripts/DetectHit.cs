@@ -21,7 +21,8 @@ public class DetectHit : MonoBehaviour
             return;
         }
 
-        bool touchedEnemy = other.transform.root.CompareTag("Enemy");
+        GameObject enemyTarget = FindDamageable(other.transform);
+        bool touchedEnemy = enemyTarget != null;
         PlayerController player = other.GetComponentInParent<PlayerController>();
         Projectile otherProjectile = other.GetComponentInParent<Projectile>();
         LungeBehavior lungeAttacker = GetComponentInParent<LungeBehavior>();
@@ -40,7 +41,7 @@ public class DetectHit : MonoBehaviour
 
         if (isProjectile && touchedEnemy && _projectile.IsReflected)
         {
-            RequestDamage(other.transform.root.gameObject, Mathf.Max(_projectile.Damage, 100));
+            RequestDamage(enemyTarget, Mathf.Max(_projectile.Damage, 100));
             _projectile.Despawn();
             return;
         }
@@ -66,7 +67,9 @@ public class DetectHit : MonoBehaviour
             {
                 if (TryParry(player))
                 {
-                    RequestDamage(transform.root.gameObject, 999999);
+                    GameObject attacker = FindDamageable(transform);
+                    if (attacker != null)
+                        RequestDamage(attacker, 999999);
                 }
                 else RequestPlayerDamage(player, Damage);
             }
@@ -80,20 +83,34 @@ public class DetectHit : MonoBehaviour
             return;
         }
 
-        if (transform.root.CompareTag("Enemy"))
+        if (FindDamageable(transform) != null)
         {
             return;
         }
 
         if (touchedEnemy)
         {
-            RequestDamage(other.transform.root.gameObject, Damage);
+            RequestDamage(enemyTarget, Damage);
         }
+    }
+
+    GameObject FindDamageable(Transform current)
+    {
+        while (current != null)
+        {
+            foreach (MonoBehaviour component in current.GetComponents<MonoBehaviour>())
+                if (component is IDamageable)
+                    return current.gameObject;
+
+            current = current.parent;
+        }
+
+        return null;
     }
 
     void RequestDamage(GameObject target, int amount)
     {
-        if (DamageRequestChannel != null) DamageRequestChannel.Raise(target, amount);
+        target.SendMessage("TakeDamage", amount, SendMessageOptions.DontRequireReceiver);
     }
 
     void RequestPlayerDamage(PlayerController player, int amount)

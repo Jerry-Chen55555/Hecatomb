@@ -16,7 +16,7 @@ public class PlayerController : MonoBehaviour
     public int Health = 100;
     public int MaxHealth = 100;
     public GameObject GameOverScreen;
-    private Image _healthFill;
+    public Image HealthFill;
     private Animator animator;
     private bool _isDead;
 
@@ -106,27 +106,27 @@ public class PlayerController : MonoBehaviour
         {
             if (image.gameObject.name == "HealthRemaining")
             {
-                _healthFill = image;
+                HealthFill = image;
                 break;
             }
         }
 
-        if (_healthFill.sprite == null)
+        if (HealthFill.sprite == null)
         {
             Texture2D white = Texture2D.whiteTexture;
-            _healthFill.sprite = Sprite.Create(
+            HealthFill.sprite = Sprite.Create(
                 white,
                 new Rect(0, 0, white.width, white.height),
                 new Vector2(0.5f, 0.5f));
         }
 
-        _healthFill.type = Image.Type.Filled;
-        _healthFill.fillMethod = Image.FillMethod.Horizontal;
-        _healthFill.fillOrigin = (int)Image.OriginHorizontal.Left;
+        HealthFill.type = Image.Type.Filled;
+        HealthFill.fillMethod = Image.FillMethod.Horizontal;
+        HealthFill.fillOrigin = (int)Image.OriginHorizontal.Left;
     }
 
     void UpdateHealthBar()
     {
-        _healthFill.fillAmount = MaxHealth > 0 ? (float)Health / MaxHealth : 0f;
+        HealthFill.fillAmount = MaxHealth > 0 ? (float)Health / MaxHealth : 0f;
     }
 }

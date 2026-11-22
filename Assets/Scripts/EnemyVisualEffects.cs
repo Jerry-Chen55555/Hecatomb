@@ -5,26 +5,19 @@ public static class EnemyVisualEffects
 {
     public static void FlashOnHit(GameObject enemy)
     {
-        EnemyHitFlash flash = enemy.GetComponent<EnemyHitFlash>();
-        if (flash == null) flash = enemy.AddComponent<EnemyHitFlash>();
-        flash.Play();
+        Flash(enemy, new Color(4f, 4f, 4f, 1f));
     }
 
-    public static IEnumerator WhiteFlash(SpriteRenderer[] renderers, float duration)
+    public static void FlashAggression(GameObject enemy)
     {
-        Color[] original = new Color[renderers.Length];
-        for (int i = 0; i < renderers.Length; i++)
-        {
-            if (renderers[i] != null)
-            {
-                original[i] = renderers[i].color;
-                // HDR tint brightens even sprites whose authored color is white.
-                renderers[i].color = new Color(4f, 4f, 4f, original[i].a);
-            }
-        }
-        yield return new WaitForSeconds(duration);
-        for (int i = 0; i < renderers.Length; i++)
-            if (renderers[i] != null) renderers[i].color = original[i];
+        Flash(enemy, Color.red);
+    }
+
+    private static void Flash(GameObject enemy, Color flashColor)
+    {
+        EnemyHitFlash flash = enemy.GetComponent<EnemyHitFlash>();
+        if (flash == null) flash = enemy.AddComponent<EnemyHitFlash>();
+        flash.Play(flashColor);
     }
 
     public static IEnumerator FadeAndDestroy(GameObject enemy, float duration = 0.45f)
@@ -60,7 +53,7 @@ public class EnemyHitFlash : MonoBehaviour
     private Color[] _baseColors;
     private Coroutine _flash;
 
-    public void Play()
+    public void Play(Color flashColor)
     {
         if (_flash != null)
         {
@@ -74,18 +67,22 @@ public class EnemyHitFlash : MonoBehaviour
             _baseColors = new Color[_renderers.Length];
             for (int i = 0; i < _renderers.Length; i++) _baseColors[i] = _renderers[i].color;
         }
-        _flash = StartCoroutine(FadeFlash());
+        _flash = StartCoroutine(FadeFlash(flashColor));
     }
 
-    private IEnumerator FadeFlash()
+    private IEnumerator FadeFlash(Color flashColor)
     {
         const float duration = 0.18f;
-        const float darkness = 0.45f;
         for (float elapsed = 0f; elapsed < duration; elapsed += Time.deltaTime)
         {
             float amount = elapsed < duration * 0.35f ? elapsed / (duration * 0.35f) : 1f - (elapsed - duration * 0.35f) / (duration * 0.65f);
             for (int i = 0; i < _renderers.Length; i++)
-                if (_renderers[i] != null) _renderers[i].color = Color.Lerp(_baseColors[i], _baseColors[i] * darkness, amount);
+            {
+                if (_renderers[i] == null) continue;
+                Color target = flashColor;
+                target.a = _baseColors[i].a;
+                _renderers[i].color = Color.Lerp(_baseColors[i], target, amount);
+            }
             yield return null;
         }
         for (int i = 0; i < _renderers.Length; i++)

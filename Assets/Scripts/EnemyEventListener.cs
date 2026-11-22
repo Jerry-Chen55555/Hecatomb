@@ -45,7 +45,7 @@ public sealed class EnemyEventListener : MonoBehaviour
     void OnDamage(GameObject target, int amount)
     {
         if (target != gameObject && target.transform.root.gameObject != gameObject) return;
-        StartCoroutine(EnemyVisualEffects.WhiteFlash(GetComponentsInChildren<SpriteRenderer>(), 0.08f));
+        EnemyVisualEffects.FlashOnHit(gameObject);
     }
 
     void OnDamageRequest(GameObject target, int amount)

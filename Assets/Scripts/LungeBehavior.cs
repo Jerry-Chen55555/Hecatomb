@@ -96,7 +96,7 @@ public class LungeBehavior : MonoBehaviour, IDamageable, IEnemyPlayerHit
                 {
                     _currentState = LungeState.Retreat;
                     _stateTimer = RetreatDuration;
-                    StartCoroutine(EnemyVisualEffects.WhiteFlash(_sprites, RetreatDuration));
+                    EnemyVisualEffects.FlashAggression(gameObject);
                 }
                 break;
 

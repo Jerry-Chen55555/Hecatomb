@@ -156,7 +156,7 @@ public class PunchingBehavior : MonoBehaviour, IDamageable, IEnemyPlayerHit
     {
         _phase = PunchPhase.Windup;
         _phaseTimer = TelegraphDuration;
-        StartCoroutine(EnemyVisualEffects.WhiteFlash(_sprites, TelegraphDuration));
+        EnemyVisualEffects.FlashAggression(gameObject);
     }
 
     void BeginLunge(Vector2 direction)

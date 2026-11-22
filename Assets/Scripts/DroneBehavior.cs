@@ -101,7 +101,7 @@ public class DroneBehavior : MonoBehaviour, IDamageable
     {
         _attacking = true;
         _lockedAim = AimAtPlayer();
-        StartCoroutine(EnemyVisualEffects.WhiteFlash(_sprites, AimTime));
+        EnemyVisualEffects.FlashAggression(gameObject);
 
         float aimTimer = AimTime;
         while (aimTimer > 0f)
