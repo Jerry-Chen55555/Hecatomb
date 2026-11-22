@@ -2,26 +2,26 @@ using UnityEngine;
 
 public class DetectHit : MonoBehaviour
 {
+    public int Damage = 25;
 
-    
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    void OnTriggerEnter2D(Collider2D other)
     {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
-    private void OnTriggerEnter2D(Collider2D other)
-    {
-
-        if (other.CompareTag("Enemy"))
+        if (other.transform.root == transform.root)
         {
-            Debug.Log("enemy hit");
+            return;
+        }
+
+        LungeBehavior lungeEnemy = other.GetComponentInParent<LungeBehavior>();
+        if (lungeEnemy != null)
+        {
+            lungeEnemy.TakeDamage(Damage);
+            return;
+        }
+
+        RangedBehavior rangedEnemy = other.GetComponentInParent<RangedBehavior>();
+        if (rangedEnemy != null)
+        {
+            rangedEnemy.TakeDamage(Damage);
         }
     }
 }
