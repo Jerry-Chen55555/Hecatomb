@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 
 public class BasicAttack : MonoBehaviour
@@ -7,17 +6,10 @@ public class BasicAttack : MonoBehaviour
     public GameObject Player;
     public float SlashCooldown = 0.3f;
     public float SlashOffset = 1f;
-    public Camera cameraMain;
+    public Camera CameraMain;
 
     private float _nextSlashTime = 0f;
     private bool _leftHand = false;
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
     void Update()
     {
         if (Input.GetMouseButton(0) && Time.time >= _nextSlashTime)
@@ -29,7 +21,7 @@ public class BasicAttack : MonoBehaviour
 
     void Slash()
     {
-        Vector3 mousePosition = cameraMain.ScreenToWorldPoint(Input.mousePosition);
+        Vector3 mousePosition = CameraMain.ScreenToWorldPoint(Input.mousePosition);
         mousePosition.z = 0f;
         
         Vector2 direction = (mousePosition - transform.position).normalized;
