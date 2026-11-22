@@ -92,10 +92,19 @@ public class DetectHit : MonoBehaviour
     bool TryParry(PlayerController player)
     {
         ParryHandler parry = player.GetComponent<ParryHandler>();
-        bool successful = parry != null && (Time.time - parry.TimeLastParried <= parry.ParryWindow
-            || (_projectile != null && _projectile.IsDroneShot && parry.isParrying));
-        if (successful) player.Heal(parry.ParryHealAmount);
-        return successful;
+        if (parry == null)
+            return false;
+
+        bool perfectParry = Time.time - parry.TimeLastParried >= 0f
+            && Time.time - parry.TimeLastParried <= parry.ParryWindow;
+        bool canReflectDroneShot = _projectile != null
+            && _projectile.IsDroneShot
+            && parry.isParrying;
+
+        if (perfectParry)
+            player.Heal(parry.ParryHealAmount);
+
+        return perfectParry || canReflectDroneShot;
     }
 
     bool TryRegisterPlayerHit(LungeBehavior lungeEnemy, PunchingBehavior punchingEnemy)

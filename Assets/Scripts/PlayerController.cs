@@ -4,19 +4,32 @@ using UnityEngine.UI;
 
 public class PlayerController : MonoBehaviour
 {
+    public event System.Action<int> DamageTaken;
+    public event System.Action<int> HealthHealed;
+
     public InputAction MoveAction;
     public Vector2 MoveInput;
     public float Speed = 10.0f;
     public int Health = 100;
     public int MaxHealth = 100;
     private Image _healthFill;
+    private Animator animator;
+
 
     void Start()
     {
+        animator = GetComponent<Animator>();
+        Invoke("StopAnimator", 0.75f);
+
         MoveAction.Enable();
         Health = Mathf.Clamp(Health, 0, MaxHealth);
         SetupHealthBar();
         UpdateHealthBar();
+    }
+
+    void StopAnimator()
+    {
+        animator.enabled = false;
     }
 
     void Update()
@@ -30,14 +43,24 @@ public class PlayerController : MonoBehaviour
 
     public void Heal(int amount)
     {
+        int previousHealth = Health;
         Health = Mathf.Clamp(Health + Mathf.Max(0, amount), 0, MaxHealth);
         UpdateHealthBar();
+
+        int healedAmount = Health - previousHealth;
+        if (healedAmount > 0)
+            HealthHealed?.Invoke(healedAmount);
     }
 
     public void TakeDamage(int amount)
     {
+        int previousHealth = Health;
         Health = Mathf.Clamp(Health - Mathf.Max(0, amount), 0, MaxHealth);
         UpdateHealthBar();
+
+        int damageAmount = previousHealth - Health;
+        if (damageAmount > 0)
+            DamageTaken?.Invoke(damageAmount);
     }
 
     void SetupHealthBar()

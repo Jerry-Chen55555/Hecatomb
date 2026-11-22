@@ -27,6 +27,7 @@ public class PlayButton : MonoBehaviour
     IEnumerator StartSequence()
     {
         yield return (StartCoroutine("FadeToBlack"));
+        yield return new WaitForSeconds(1f); 
         this.gameObject.SetActive(false);
         SceneManager.LoadScene("JerryScene");
     }
@@ -41,7 +42,5 @@ public class PlayButton : MonoBehaviour
             image.color = color;
             yield return new WaitForSeconds(1f/255f);
         }
-
-        yield return new WaitForSeconds(0.5f);
     }
 }
