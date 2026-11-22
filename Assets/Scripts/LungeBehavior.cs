@@ -12,7 +12,6 @@ public class LungeBehavior : MonoBehaviour
     public float ChargeSpeed = 15f;
     public float ChargeDuration = 0.5f;
     public float ChargeAcceleration = 150f;
-    public int ContactDamage = 20;
     public Collider2D ChargeHitbox;
     public int Health = 100;
     public float ChargePathWidth = 1f;
@@ -52,55 +51,29 @@ public class LungeBehavior : MonoBehaviour
         _lungerRb = GetComponent<Rigidbody2D>();
         _player = GameObject.Find("Player");
         CreateChargePathIndicator();
+        DetectHit.IgnoreEnemyCollisions(gameObject);
 
-        if (ChargeHitbox != null)
+        ChargeHitbox.enabled = false;
+
+        Collider2D[] enemyColliders = GetComponentsInChildren<Collider2D>();
+        Collider2D[] playerColliders = _player.GetComponentsInChildren<Collider2D>();
+
+        foreach (Collider2D enemyCollider in enemyColliders)
         {
-            ChargeHitbox.enabled = false;
-        }
-
-        if (_player != null)
-        {
-            Collider2D[] enemyColliders = GetComponentsInChildren<Collider2D>();
-            Collider2D[] playerColliders = _player.GetComponentsInChildren<Collider2D>();
-
-            foreach (Collider2D enemyCollider in enemyColliders)
+            if (enemyCollider.isTrigger)
             {
-                if (enemyCollider.isTrigger)
-                {
-                    continue;
-                }
+                continue;
+            }
 
-                foreach (Collider2D playerCollider in playerColliders)
-                {
-                    Physics2D.IgnoreCollision(enemyCollider, playerCollider);
-                }
+            foreach (Collider2D playerCollider in playerColliders)
+            {
+                Physics2D.IgnoreCollision(enemyCollider, playerCollider);
             }
         }
     }
 
     void FixedUpdate()
     {
-        if (_lungerRb == null)
-        {
-            return;
-        }
-
-        if (_player == null)
-        {
-            if (_chargePathIndicator != null)
-            {
-                _chargePathIndicator.enabled = false;
-            }
-
-            if (ChargeHitbox != null)
-            {
-                ChargeHitbox.enabled = false;
-            }
-
-            MoveSmoothly(Vector2.zero, Braking);
-            return;
-        }
-
         Vector2 direction = ((Vector2)_player.transform.position - _lungerRb.position).normalized;
         float distance = Vector2.Distance(_lungerRb.position, _player.transform.position);
 
@@ -129,10 +102,7 @@ public class LungeBehavior : MonoBehaviour
                     _hasDamagedPlayerThisCharge = false;
                     _currentState = LungeState.Charge;
                     _stateTimer = ChargeDuration;
-                    if (ChargeHitbox != null)
-                    {
-                        ChargeHitbox.enabled = true;
-                    }
+                    ChargeHitbox.enabled = true;
                 }
                 break;
 
@@ -145,10 +115,7 @@ public class LungeBehavior : MonoBehaviour
                 {
                     _currentState = LungeState.Rest;
                     _stateTimer = RestDuration;
-                    if (ChargeHitbox != null)
-                    {
-                        ChargeHitbox.enabled = false;
-                    }
+                    ChargeHitbox.enabled = false;
                 }
                 break;
 
@@ -208,11 +175,6 @@ public class LungeBehavior : MonoBehaviour
 
     void UpdateChargePathIndicator(Vector2 directionToPlayer)
     {
-        if (_chargePathIndicator == null)
-        {
-            return;
-        }
-
         Vector2 pathOrigin;
         Vector2 pathDirection;
 
@@ -262,21 +224,15 @@ public class LungeBehavior : MonoBehaviour
         }
     }
 
-    void OnTriggerEnter2D(Collider2D other)
+    public bool TryRegisterPlayerHit()
     {
         if (_currentState != LungeState.Charge || _hasDamagedPlayerThisCharge)
         {
-            return;
-        }
-
-        PlayerController playerController = other.GetComponentInParent<PlayerController>();
-        if (playerController == null || playerController.gameObject != _player)
-        {
-            return;
+            return false;
         }
 
         _hasDamagedPlayerThisCharge = true;
-        playerController.Health = Mathf.Max(0, playerController.Health - ContactDamage);
+        return true;
     }
 
     public void TakeDamage(int damageAmount)

@@ -9,35 +9,24 @@ public class Projectile : MonoBehaviour
     private int _damage;
     private Transform _target;
 
+    public int Damage => _damage;
+
     void Awake()
     {
         _projectileRigidbody = GetComponent<Rigidbody2D>();
 
-        GameObject player = GameObject.Find("Player");
-        if (player != null)
-        {
-            _target = player.transform;
-        }
+        _target = GameObject.Find("Player").transform;
     }
 
     public void Init(Vector2 direction, float speed, int projectileDamage)
     {
-        if (_projectileRigidbody != null)
-        {
-            _projectileRigidbody.linearVelocity = direction.normalized * speed;
-        }
-
+        _projectileRigidbody.linearVelocity = direction.normalized * speed;
         _damage = projectileDamage;
         Destroy(gameObject, Lifetime);
     }
 
     void FixedUpdate()
     {
-        if (_projectileRigidbody == null || _target == null)
-        {
-            return;
-        }
-
         Vector2 velocity = _projectileRigidbody.linearVelocity;
         float speed = velocity.magnitude;
         Vector2 toTarget = (Vector2)_target.position - _projectileRigidbody.position;
@@ -56,29 +45,8 @@ public class Projectile : MonoBehaviour
         _projectileRigidbody.linearVelocity = Quaternion.Euler(0f, 0f, homedAngle) * Vector2.right * speed;
     }
 
-    void OnTriggerEnter2D(Collider2D other)
+    public void Despawn()
     {
-        if (other.transform.root == transform.root)
-        {
-            return;
-        }
-
-        bool touchedEnemy =
-            other.GetComponentInParent<LungeBehavior>() != null ||
-            other.GetComponentInParent<RangedBehavior>() != null ||
-            other.CompareTag("Enemy") ||
-            other.transform.root.CompareTag("Enemy");
-        if (touchedEnemy)
-        {
-            return;
-        }
-
-        PlayerController playerController = other.GetComponentInParent<PlayerController>();
-        if (playerController != null)
-        {
-            playerController.Health = Mathf.Max(0, playerController.Health - _damage);
-        }
-
         Destroy(gameObject);
     }
 }
