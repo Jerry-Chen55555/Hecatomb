@@ -46,7 +46,7 @@ public sealed class EnemyEventListener : MonoBehaviour
     {
         if (target != gameObject && target.transform.root.gameObject != gameObject) return;
         SfxPlayer.Instance?.PlayEnemyHit();
-        StartCoroutine(EnemyVisualEffects.WhiteFlash(GetComponentsInChildren<SpriteRenderer>(), 0.08f));
+        EnemyVisualEffects.FlashOnHit(gameObject);
     }
 
     void OnDamageRequest(GameObject target, int amount)

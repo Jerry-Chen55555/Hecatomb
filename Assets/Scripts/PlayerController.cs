@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class PlayerController : MonoBehaviour
 {
@@ -14,8 +15,10 @@ public class PlayerController : MonoBehaviour
     public float Speed = 10.0f;
     public int Health = 100;
     public int MaxHealth = 100;
-    private Image _healthFill;
+    public GameObject GameOverScreen;
+    public Image HealthFill;
     private Animator animator;
+    private bool _isDead;
 
 
     void Start()
@@ -38,6 +41,9 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
+        if (_isDead)
+            return;
+
         Health = Mathf.Clamp(Health, 0, MaxHealth);
         UpdateHealthBar();
         MoveInput = MoveAction.ReadValue<Vector2>();
@@ -52,12 +58,15 @@ public class PlayerController : MonoBehaviour
         UpdateHealthBar();
 
         int healedAmount = Health - previousHealth;
-        if (healedAmount > 0)
+        if (amount > 0)
             HealthHealed?.Invoke(healedAmount);
     }
 
     public void TakeDamage(int amount)
     {
+        if (_isDead)
+            return;
+
         int previousHealth = Health;
         Health = Mathf.Clamp(Health - Mathf.Max(0, amount), 0, MaxHealth);
         UpdateHealthBar();
@@ -71,6 +80,30 @@ public class PlayerController : MonoBehaviour
             else
                 SfxPlayer.Instance?.PlayPlayerHit();
         }
+
+        if (Health <= 0)
+            GameOver();
+    }
+
+    private void GameOver()
+    {
+        _isDead = true;
+        MoveAction.Disable();
+        Time.timeScale = 0f;
+        if (GameOverScreen != null)
+            GameOverScreen.SetActive(true);
+    }
+
+    public void RestartGame()
+    {
+        Time.timeScale = 1f;
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+    }
+
+    public void ReturnToMenu()
+    {
+        Time.timeScale = 1f;
+        SceneManager.LoadScene("MainMenu");
     }
 
     void SetupHealthBar()
@@ -79,27 +112,27 @@ public class PlayerController : MonoBehaviour
         {
             if (image.gameObject.name == "HealthRemaining")
             {
-                _healthFill = image;
+                HealthFill = image;
                 break;
             }
         }
 
-        if (_healthFill.sprite == null)
+        if (HealthFill.sprite == null)
         {
             Texture2D white = Texture2D.whiteTexture;
-            _healthFill.sprite = Sprite.Create(
+            HealthFill.sprite = Sprite.Create(
                 white,
                 new Rect(0, 0, white.width, white.height),
                 new Vector2(0.5f, 0.5f));
         }
 
-        _healthFill.type = Image.Type.Filled;
-        _healthFill.fillMethod = Image.FillMethod.Horizontal;
-        _healthFill.fillOrigin = (int)Image.OriginHorizontal.Left;
+        HealthFill.type = Image.Type.Filled;
+        HealthFill.fillMethod = Image.FillMethod.Horizontal;
+        HealthFill.fillOrigin = (int)Image.OriginHorizontal.Left;
     }
 
     void UpdateHealthBar()
     {
-        _healthFill.fillAmount = MaxHealth > 0 ? (float)Health / MaxHealth : 0f;
+        HealthFill.fillAmount = MaxHealth > 0 ? (float)Health / MaxHealth : 0f;
     }
 }

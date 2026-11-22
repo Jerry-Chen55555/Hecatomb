@@ -103,7 +103,10 @@ public class MotorcycleBehavior : MonoBehaviour, IDamageable
             SfxPlayer.Instance?.PlayBikeParried();
             _parry.RegisterParrySuccess();
             if (perfectParry)
+            {
+                _parry.RegisterPerfectParry(gameObject);
                 _playerController.Heal(_parry.ParryHealAmount);
+            }
             TakeDamage(999);
             return;
         }
@@ -118,6 +121,7 @@ public class MotorcycleBehavior : MonoBehaviour, IDamageable
 
         Health -= amount;
         if (EnemyDamagedChannel != null) EnemyDamagedChannel.Raise(gameObject, amount);
+        EnemyVisualEffects.FlashOnHit(gameObject);
         if (Health > 0) return;
 
         _dead = true;

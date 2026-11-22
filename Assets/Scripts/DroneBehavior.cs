@@ -101,7 +101,7 @@ public class DroneBehavior : MonoBehaviour, IDamageable
     {
         _attacking = true;
         _lockedAim = AimAtPlayer();
-        StartCoroutine(EnemyVisualEffects.WhiteFlash(_sprites, AimTime));
+        EnemyVisualEffects.FlashAggression(gameObject);
 
         float aimTimer = AimTime;
         while (aimTimer > 0f)
@@ -174,6 +174,7 @@ public class DroneBehavior : MonoBehaviour, IDamageable
 
         Health -= amount;
         if (EnemyDamagedChannel != null) EnemyDamagedChannel.Raise(gameObject, amount);
+        EnemyVisualEffects.FlashOnHit(gameObject);
         if (Health > 0) return;
 
         _dead = true;

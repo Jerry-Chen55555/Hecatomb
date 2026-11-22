@@ -47,7 +47,8 @@ public class LungeBehavior : MonoBehaviour, IDamageable, IEnemyPlayerHit
     private Vector2 _chargeDirection;
     private Vector2 _chargeStartPosition;
     private bool _hasDamagedPlayerThisCharge;
-    private LineRenderer _chargePathIndicator;
+    private Mesh _chargePathMesh;
+    private MeshFilter _chargePathMeshFilter;
     private Material _chargePathMaterial;
     private SpriteRenderer[] _sprites;
 
@@ -96,7 +97,7 @@ public class LungeBehavior : MonoBehaviour, IDamageable, IEnemyPlayerHit
                 {
                     _currentState = LungeState.Retreat;
                     _stateTimer = RetreatDuration;
-                    StartCoroutine(EnemyVisualEffects.WhiteFlash(_sprites, RetreatDuration));
+                    EnemyVisualEffects.FlashAggression(gameObject);
                 }
                 break;
 
@@ -158,25 +159,21 @@ public class LungeBehavior : MonoBehaviour, IDamageable, IEnemyPlayerHit
         GameObject indicatorObject = new GameObject("Charge Path Indicator");
         indicatorObject.transform.SetParent(transform, false);
 
-        _chargePathIndicator = indicatorObject.AddComponent<LineRenderer>();
-        _chargePathIndicator.useWorldSpace = true;
-        _chargePathIndicator.positionCount = 5;
-        _chargePathIndicator.startWidth = ChargePathLineWidth;
-        _chargePathIndicator.endWidth = ChargePathLineWidth;
-        _chargePathIndicator.numCornerVertices = 2;
-        _chargePathIndicator.sortingOrder = 5;
-        _chargePathIndicator.enabled = false;
-
+        _chargePathMeshFilter = indicatorObject.AddComponent<MeshFilter>();
+        _chargePathMesh = new Mesh { name = "Charge Path Area" };
+        _chargePathMesh.vertices = new Vector3[4];
+        _chargePathMesh.triangles = new[] { 0, 1, 2, 0, 2, 3 };
+        _chargePathMeshFilter.sharedMesh = _chargePathMesh;
+        MeshRenderer indicatorRenderer = indicatorObject.AddComponent<MeshRenderer>();
         Shader shader = Shader.Find("Sprites/Default");
         if (shader != null)
         {
             _chargePathMaterial = new Material(shader);
-            _chargePathIndicator.material = _chargePathMaterial;
+            indicatorRenderer.material = _chargePathMaterial;
         }
 
         Color color = new Color(1f, 0.25f, 0.15f, ChargePathAlpha);
-        _chargePathIndicator.startColor = color;
-        _chargePathIndicator.endColor = color;
+        indicatorRenderer.sortingOrder = 5;
         if (_chargePathMaterial != null)
         {
             _chargePathMaterial.color = color;
@@ -200,13 +197,13 @@ public class LungeBehavior : MonoBehaviour, IDamageable, IEnemyPlayerHit
         }
         else
         {
-            _chargePathIndicator.enabled = false;
+            _chargePathMeshFilter.gameObject.SetActive(false);
             return;
         }
 
         if (pathDirection.sqrMagnitude < 0.0001f)
         {
-            _chargePathIndicator.enabled = false;
+            _chargePathMeshFilter.gameObject.SetActive(false);
             return;
         }
 
@@ -215,15 +212,15 @@ public class LungeBehavior : MonoBehaviour, IDamageable, IEnemyPlayerHit
         Vector2 end = pathOrigin + pathDirection * (ChargeSpeed * ChargeDuration);
         float z = transform.position.z;
 
-        _chargePathIndicator.SetPositions(new Vector3[]
+        _chargePathMeshFilter.gameObject.SetActive(true);
+        _chargePathMesh.vertices = new Vector3[]
         {
-            new Vector3(pathOrigin.x - side.x, pathOrigin.y - side.y, z),
-            new Vector3(pathOrigin.x + side.x, pathOrigin.y + side.y, z),
-            new Vector3(end.x + side.x, end.y + side.y, z),
-            new Vector3(end.x - side.x, end.y - side.y, z),
-            new Vector3(pathOrigin.x - side.x, pathOrigin.y - side.y, z)
-        });
-        _chargePathIndicator.enabled = true;
+            transform.InverseTransformPoint(new Vector3(pathOrigin.x - side.x, pathOrigin.y - side.y, z)),
+            transform.InverseTransformPoint(new Vector3(pathOrigin.x + side.x, pathOrigin.y + side.y, z)),
+            transform.InverseTransformPoint(new Vector3(end.x + side.x, end.y + side.y, z)),
+            transform.InverseTransformPoint(new Vector3(end.x - side.x, end.y - side.y, z))
+        };
+        _chargePathMesh.RecalculateBounds();
     }
 
     void OnDestroy()
@@ -232,6 +229,8 @@ public class LungeBehavior : MonoBehaviour, IDamageable, IEnemyPlayerHit
         {
             Destroy(_chargePathMaterial);
         }
+        if (_chargePathMesh != null)
+            Destroy(_chargePathMesh);
     }
 
     public bool TryRegisterPlayerHit()
@@ -254,6 +253,7 @@ public class LungeBehavior : MonoBehaviour, IDamageable, IEnemyPlayerHit
 
         Health = Mathf.Max(0, Health - damageAmount);
         if (EnemyDamagedChannel != null) EnemyDamagedChannel.Raise(gameObject, damageAmount);
+        EnemyVisualEffects.FlashOnHit(gameObject);
         if (Health == 0)
         {
             if (EnemyDiedChannel != null) EnemyDiedChannel.Raise(gameObject);
