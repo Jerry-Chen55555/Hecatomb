@@ -9,6 +9,8 @@ public class Projectile : MonoBehaviour
     private int _damage;
     private Transform _target;
     private bool _reflected;
+    private bool _homesIn = true;
+    public bool IsDroneShot { get; private set; }
 
     public int Damage => _damage;
     public bool IsReflected => _reflected;
@@ -20,16 +22,18 @@ public class Projectile : MonoBehaviour
         _target = GameObject.Find("Player").transform;
     }
 
-    public void Init(Vector2 direction, float speed, int projectileDamage)
+    public void Init(Vector2 direction, float speed, int projectileDamage, bool droneShot = false)
     {
         _projectileRigidbody.linearVelocity = direction.normalized * speed;
         _damage = projectileDamage;
+        IsDroneShot = droneShot;
+        _homesIn = !droneShot;
         Destroy(gameObject, Lifetime);
     }
 
     void FixedUpdate()
     {
-        if (_reflected) return;
+        if (_reflected || !_homesIn) return;
         Vector2 velocity = _projectileRigidbody.linearVelocity;
         float speed = velocity.magnitude;
         Vector2 toTarget = (Vector2)_target.position - _projectileRigidbody.position;

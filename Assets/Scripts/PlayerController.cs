@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.UI;
 
 public class PlayerController : MonoBehaviour
 {
@@ -7,16 +8,69 @@ public class PlayerController : MonoBehaviour
     public Vector2 MoveInput;
     public float Speed = 10.0f;
     public int Health = 100;
+    public int MaxHealth = 100;
+    private Image _healthFill;
 
     void Start()
     {
         MoveAction.Enable();
+        Health = Mathf.Clamp(Health, 0, MaxHealth);
+        SetupHealthBar();
+        UpdateHealthBar();
     }
 
     void Update()
     {
+        Health = Mathf.Clamp(Health, 0, MaxHealth);
+        UpdateHealthBar();
         MoveInput = MoveAction.ReadValue<Vector2>();
         transform.Translate(Vector3.right * MoveInput.x * Time.deltaTime * Speed);
         transform.Translate(Vector3.up * MoveInput.y * Time.deltaTime * Speed);
+    }
+
+    public void Heal(int amount)
+    {
+        Health = Mathf.Clamp(Health + Mathf.Max(0, amount), 0, MaxHealth);
+        UpdateHealthBar();
+    }
+
+    public void TakeDamage(int amount)
+    {
+        Health = Mathf.Clamp(Health - Mathf.Max(0, amount), 0, MaxHealth);
+        UpdateHealthBar();
+    }
+
+    void SetupHealthBar()
+    {
+        foreach (Image image in FindObjectsOfType<Image>())
+        {
+            if (image.gameObject.name == "HealthRemaining")
+            {
+                _healthFill = image;
+                break;
+            }
+        }
+
+        if (_healthFill == null)
+        {
+            Debug.LogWarning("PlayerController: no Image named 'HealthRemaining' found, so the health bar won't update.");
+            return;
+        }
+
+        if (_healthFill.sprite == null)
+        {
+            Texture2D white = Texture2D.whiteTexture;
+            _healthFill.sprite = Sprite.Create(white, new Rect(0, 0, white.width, white.height), new Vector2(0.5f, 0.5f));
+        }
+
+        _healthFill.type = Image.Type.Filled;
+        _healthFill.fillMethod = Image.FillMethod.Horizontal;
+        _healthFill.fillOrigin = (int)Image.OriginHorizontal.Left;
+    }
+
+    void UpdateHealthBar()
+    {
+        if (_healthFill != null)
+            _healthFill.fillAmount = MaxHealth > 0 ? (float)Health / MaxHealth : 0f;
     }
 }

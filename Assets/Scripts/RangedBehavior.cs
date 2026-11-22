@@ -20,7 +20,7 @@ public class RangedBehavior : MonoBehaviour
     public float FireInterval = 3f;
     public float ProjectileSpeed = 10f;
     public float SpreadAngle = 4f;
-    public int ProjectileDamage = 1;
+    public int ProjectileDamage = 20;
     public int Health = 100;
 
     private Rigidbody2D _rigidbody;
