@@ -21,6 +21,8 @@ public class BasicAttack : MonoBehaviour
 
     void Slash()
     {
+        SfxPlayer.Instance?.PlaySwordSlash();
+
         Vector3 mousePosition = CameraMain.ScreenToWorldPoint(Input.mousePosition);
         mousePosition.z = 0f;
         

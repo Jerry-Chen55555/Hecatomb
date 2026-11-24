@@ -20,6 +20,7 @@ public class BackgroundIntroAnimation : MonoBehaviour
     private void Start()
     {
         StartCoroutine(PlayIntroAnimation());
+        SfxPlayer.Instance?.PlayEntrance();
     }
 
     private IEnumerator PlayIntroAnimation()
