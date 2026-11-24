@@ -5,11 +5,13 @@ using System.Collections;
 public class ParryHandler : MonoBehaviour
 {
     public float TimeLastParried;
-    public float ParryWindow = 0.2f;
+    public float ParryWindow = 0.15f;
+    public float BlockWindow = 0.35f;
     public InputAction ParryAction;
     public GameObject Shield;
     public GameObject PerfectParryVFX;
     public bool isParrying = false;
+    public bool blockSuccess = false;
     public bool parrySuccess = false;
     public float ParryCooldown = 0.4f;
     public int ParryHealAmount = 20;
@@ -27,6 +29,19 @@ public class ParryHandler : MonoBehaviour
     }
 
     public void RegisterParrySuccess()
+    {
+        if (!isParrying)
+        {
+            return;
+        }
+
+        blockSuccess = true;
+        SfxPlayer.Instance?.PlayParry();
+        ShakeCamera();
+        StartParry();
+    }
+
+    public void RegisterPerfectParrySuccess()
     {
         if (!isParrying)
         {
@@ -108,10 +123,11 @@ public class ParryHandler : MonoBehaviour
             Shield.SetActive(false);
             isParrying = false;
 
-            if (parrySuccess)
+            if (blockSuccess || parrySuccess)
             {
                 _nextParryTime = Time.time;
             }
+            blockSuccess = false;
             parrySuccess = false;
 
             if (_animateCoroutine != null)
@@ -133,7 +149,7 @@ public class ParryHandler : MonoBehaviour
         Shield.transform.localScale = Vector3.one * 2f;
         Shield.GetComponent<SpriteRenderer>().color = new Color(0.2f, 1f, 1f, 0.5f);
         isParrying = true;
-        if (!parrySuccess)
+        if (!blockSuccess && !parrySuccess)
         {
             _nextParryTime = Time.time + ParryCooldown;
         }
@@ -148,7 +164,7 @@ public class ParryHandler : MonoBehaviour
         {
             Vector3 scale = Vector3.one * (2 - 2*Mathf.Pow(i / 60f, 2));
             Shield.transform.localScale = scale;
-            if (i < 20)
+            if (i < 20 && !blockSuccess)
             {
                 spriteRenderer.color = new Color(0.2f, 1f, 1f, 0.5f);
             }

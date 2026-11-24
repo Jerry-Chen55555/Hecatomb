@@ -2,6 +2,7 @@ using UnityEngine;
 
 public class PunchingBehavior : MonoBehaviour, IDamageable, IEnemyPlayerHit
 {
+    public int CurrentHealth => Health;
     public float MoveSpeed = 3f;
     public float Acceleration = 18f;
     public float AttackRange = 1.2f;

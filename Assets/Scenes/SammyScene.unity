@@ -1848,7 +1848,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: '::'
   TimeLastParried: 0
-  ParryWindow: 0.2
+  ParryWindow: 0.15
   ParryAction:
     m_Name: Parry
     m_Type: 0

@@ -28,7 +28,7 @@ public class PlayerController : MonoBehaviour
         _eventListener = GetComponent<EnemyEventListener>();
         _eventListener.Configure(null, PlayerHitChannel, null);
         animator = GetComponent<Animator>();
-        Invoke("StopAnimator", 0.75f);
+        Invoke("StopAnimator", 1.0f);
 
         MoveAction.Enable();
         Health = Mathf.Clamp(Health, 0, MaxHealth);

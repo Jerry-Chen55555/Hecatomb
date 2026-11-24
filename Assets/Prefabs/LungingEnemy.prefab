@@ -300,7 +300,7 @@ MonoBehaviour:
   ChargeDuration: 0.5
   ChargeAcceleration: 150
   ChargeHitbox: {fileID: 753941885}
-  Health: 100
+  Health: 200
   EnemyDamagedChannel: {fileID: 11400000, guid: 61ed7ca9efce4f2bbfcff194733a4a6d, type: 2}
   EnemyDamageRequestChannel: {fileID: 11400000, guid: 95ccb7fce23d43c889da7e726869295b, type: 2}
   EnemyDiedChannel: {fileID: 11400000, guid: a6540d4b1df74390939745b4fd720f3a, type: 2}

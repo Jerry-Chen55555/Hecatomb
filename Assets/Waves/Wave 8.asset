@@ -15,7 +15,7 @@ MonoBehaviour:
   subwaves:
   - enemyPrefab: {fileID: 6216797821579183175, guid: d1b80000000000000000000000000003, type: 3}
     enemyCount: 3
-    spawnInterval: 5
+    spawnInterval: 3
     delayAfter: 5
   - enemyPrefab: {fileID: 3648205875574225530, guid: 8a645116698a4b16a314aa769c8a688a, type: 3}
     enemyCount: 8
@@ -24,4 +24,16 @@ MonoBehaviour:
   - enemyPrefab: {fileID: 6216797821579183175, guid: d1b80000000000000000000000000002, type: 3}
     enemyCount: 3
     spawnInterval: 3
+    delayAfter: 2
+  - enemyPrefab: {fileID: 6216797821579183175, guid: d1b80000000000000000000000000003, type: 3}
+    enemyCount: 2
+    spawnInterval: 0.5
+    delayAfter: 2
+  - enemyPrefab: {fileID: 6216797821579183175, guid: d1b80000000000000000000000000003, type: 3}
+    enemyCount: 2
+    spawnInterval: 0.5
+    delayAfter: 2
+  - enemyPrefab: {fileID: 6216797821579183175, guid: d1b80000000000000000000000000003, type: 3}
+    enemyCount: 2
+    spawnInterval: 0.5
     delayAfter: 2

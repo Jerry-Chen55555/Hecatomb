@@ -41,7 +41,11 @@ public class DetectHit : MonoBehaviour
 
         if (isProjectile && touchedEnemy && _projectile.IsReflected)
         {
-            RequestDamage(enemyTarget, Mathf.Max(_projectile.Damage, 100));
+            IDamageable damageable = FindDamageableComponent(enemyTarget);
+            int damage = _projectile.IsPerfectParry
+                ? 999999
+                : Mathf.CeilToInt(damageable.CurrentHealth * 0.5f);
+            RequestDamage(enemyTarget, damage);
             _projectile.Despawn();
             return;
         }
@@ -50,10 +54,12 @@ public class DetectHit : MonoBehaviour
         {
             if (isProjectile)
             {
-                if (TryParry(player))
+                if (TryParry(player, out bool perfectParry))
                 {
                     if (_projectile.IsDroneShot)
                         player.GetComponent<ParryHandler>().AllowQuickParry();
+                    if (perfectParry)
+                        _projectile.MarkPerfectParry();
                     Vector2 aim = Camera.main != null
                         ? (Vector2)Camera.main.ScreenToWorldPoint(Mouse.current.position.ReadValue()) - (Vector2)player.transform.position
                         : (Vector2)transform.position - (Vector2)player.transform.position;
@@ -65,11 +71,16 @@ public class DetectHit : MonoBehaviour
             }
             else if (TryRegisterPlayerHit(lungeAttacker, punchingAttacker))
             {
-                if (TryParry(player))
+                if (TryParry(player, out bool perfectParry))
                 {
                     GameObject attacker = FindDamageable(transform);
                     if (attacker != null)
-                        RequestDamage(attacker, 999999);
+                    {
+                        IDamageable damageable = FindDamageableComponent(attacker);
+                        RequestDamage(attacker, perfectParry
+                            ? 999999
+                            : Mathf.CeilToInt(damageable.CurrentHealth * 0.5f));
+                    }
                 }
                 else RequestPlayerDamage(player, Damage);
             }
@@ -108,6 +119,15 @@ public class DetectHit : MonoBehaviour
         return null;
     }
 
+    IDamageable FindDamageableComponent(GameObject target)
+    {
+        foreach (MonoBehaviour component in target.GetComponents<MonoBehaviour>())
+            if (component is IDamageable damageable)
+                return damageable;
+
+        return target.GetComponentInParent<IDamageable>();
+    }
+
     void RequestDamage(GameObject target, int amount)
     {
         target.SendMessage("TakeDamage", amount, SendMessageOptions.DontRequireReceiver);
@@ -118,24 +138,37 @@ public class DetectHit : MonoBehaviour
         if (PlayerHitChannel != null) PlayerHitChannel.Raise(player.gameObject, amount);
     }
 
-    bool TryParry(PlayerController player)
+    bool TryParry(PlayerController player, out bool perfectParry)
     {
+        perfectParry = false;
         ParryHandler parry = player.GetComponent<ParryHandler>();
         if (parry == null)
             return false;
 
-        bool parried = parry.isParrying;
-        bool perfectParry = parried
-            && Time.time - parry.TimeLastParried >= 0f
-            && Time.time - parry.TimeLastParried <= parry.ParryWindow;
+        float parryElapsed = Time.time - parry.TimeLastParried;
+        perfectParry = parry.isParrying
+            && parryElapsed >= 0f
+            && parryElapsed <= parry.ParryWindow;
+        bool parried = parry.isParrying
+            && parryElapsed >= 0f
+            && parryElapsed <= parry.BlockWindow;
 
         if (parried)
-            parry.RegisterParrySuccess();
+        {
+            if (perfectParry)
+                parry.RegisterPerfectParrySuccess();
+            else
+                parry.RegisterParrySuccess();
+        }
 
         if (perfectParry)
         {
             parry.RegisterPerfectParry(transform.root.gameObject);
             player.Heal(parry.ParryHealAmount);
+        }
+        else if (parried)
+        {
+            player.Heal(Mathf.CeilToInt(parry.ParryHealAmount / 3f));
         }
 
         return parried;

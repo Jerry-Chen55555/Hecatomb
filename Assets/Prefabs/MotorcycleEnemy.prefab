@@ -99,8 +99,8 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 4145948990728729169}
   - component: {fileID: 1551805559142196499}
+  - component: {fileID: 4145948990728729169}
   - component: {fileID: 7481321092680499505}
   - component: {fileID: 589700490388478525}
   - component: {fileID: 5600056412158359404}
@@ -127,6 +127,22 @@ Transform:
   - {fileID: 7626066821292385261}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &4145948990728729169
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6216797821579183175}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c014f7e4d6cb47cead7da46d21e6ceaf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EnemyEventListener
+  DamageRequestChannel: {fileID: 11400000, guid: 95ccb7fce23d43c889da7e726869295b, type: 2}
+  DamageChannel: {fileID: 11400000, guid: 61ed7ca9efce4f2bbfcff194733a4a6d, type: 2}
+  PlayerHitChannel: {fileID: 0}
+  DeathChannel: {fileID: 11400000, guid: a6540d4b1df74390939745b4fd720f3a, type: 2}
 --- !u!50 &7481321092680499505
 Rigidbody2D:
   serializedVersion: 5
@@ -164,19 +180,19 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d1a80000000000000000000000000003, type: 3}
-  m_Name:
+  m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MotorcycleBehavior
-  Speed: 8
-  TurnRate: 150
-  Acceleration: 14
-  DashSpeedMultiplier: 1.5
+  Speed: 10
+  TurnRate: 175
+  Acceleration: 16
+  DashSpeedMultiplier: 2
   CommitDistance: 3.5
-  CommitAngle: 35
+  CommitAngle: 30
   CommitTime: 0.7
   Damage: 20
-  HitRadius: 0.8
+  HitRadius: 1
   HitCooldown: 1
-  Health: 120
+  Health: 300
   EnemyDamagedChannel: {fileID: 11400000, guid: 61ed7ca9efce4f2bbfcff194733a4a6d, type: 2}
   EnemyDamageRequestChannel: {fileID: 11400000, guid: 95ccb7fce23d43c889da7e726869295b, type: 2}
   EnemyDiedChannel: {fileID: 11400000, guid: a6540d4b1df74390939745b4fd720f3a, type: 2}
@@ -215,7 +231,7 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 0.0035606027, y: 0.089012384}
+  m_Offset: {x: -0.006771028, y: 0.109895825}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
@@ -225,22 +241,5 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 1.519833, y: 1.5768008}
+  m_Size: {x: 2.119069, y: 1.535034}
   m_EdgeRadius: 0
-
---- !u!114 &4145948990728729169
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6216797821579183175}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c014f7e4d6cb47cead7da46d21e6ceaf, type: 3}
-  m_Name:
-  m_EditorClassIdentifier: Assembly-CSharp::EnemyEventListener
-  DamageRequestChannel: {fileID: 11400000, guid: 95ccb7fce23d43c889da7e726869295b, type: 2}
-  DamageChannel: {fileID: 11400000, guid: 61ed7ca9efce4f2bbfcff194733a4a6d, type: 2}
-  PlayerHitChannel: {fileID: 0}
-  DeathChannel: {fileID: 11400000, guid: a6540d4b1df74390939745b4fd720f3a, type: 2}

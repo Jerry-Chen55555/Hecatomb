@@ -2,6 +2,7 @@ using UnityEngine;
 
 public class SniperBehavior : MonoBehaviour, IDamageable
 {
+    public int CurrentHealth => Health;
     public float StayBack = 9f;
     public float StayBackTolerance = 2f;
     public float MoveSpeed = 3f;
@@ -215,10 +216,13 @@ public class SniperBehavior : MonoBehaviour, IDamageable
     void Fire()
     {
         SfxPlayer.Instance?.PlaySniperShot();
-        bool parried = _parry != null && _parry.isParrying;
-        bool perfectParry = parried
-            && Time.time - _parry.TimeLastParried >= 0f
-            && Time.time - _parry.TimeLastParried <= _parry.ParryWindow;
+        float parryElapsed = _parry == null ? float.PositiveInfinity : Time.time - _parry.TimeLastParried;
+        bool perfectParry = _parry != null && _parry.isParrying
+            && parryElapsed >= 0f
+            && parryElapsed <= _parry.ParryWindow;
+        bool parried = _parry != null && _parry.isParrying
+            && parryElapsed >= 0f
+            && parryElapsed <= _parry.BlockWindow;
 
         _fireEnd = _player.position;
         _fireColor = parried ? Color.cyan : Color.white;
@@ -229,13 +233,20 @@ public class SniperBehavior : MonoBehaviour, IDamageable
 
         if (parried)
         {
-            _parry.RegisterParrySuccess();
+            if (perfectParry)
+                _parry.RegisterPerfectParrySuccess();
+            else
+                _parry.RegisterParrySuccess();
             if (perfectParry)
             {
                 _parry.RegisterPerfectParry(gameObject);
                 _playerController.Heal(_parry.ParryHealAmount);
             }
-            TakeDamage(ParryReflectDamage);
+            else
+            {
+                _playerController.Heal(Mathf.CeilToInt(_parry.ParryHealAmount / 3f));
+            }
+            TakeDamage(perfectParry ? 999999 : Mathf.CeilToInt(Health * 0.5f));
         }
         else
         {

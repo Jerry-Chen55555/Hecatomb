@@ -3,6 +3,7 @@ using UnityEngine;
 
 public class DroneBehavior : MonoBehaviour, IDamageable
 {
+    public int CurrentHealth => Health;
     public GameObject BulletPrefab;
     public float BulletSpeed = 10f;
     public int BulletDamage = 8;

@@ -89,7 +89,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4fe7d49a253e14d78845f018e7bc77cb, type: 3}
-  m_Name:
+  m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DetectHit
   Damage: 10
   DamageRequestChannel: {fileID: 11400000, guid: 95ccb7fce23d43c889da7e726869295b, type: 2}
@@ -102,8 +102,8 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 1738867538742603772}
   - component: {fileID: 1118971840390732557}
+  - component: {fileID: 1738867538742603772}
   - component: {fileID: 7963287954812073076}
   - component: {fileID: 3070379195114402865}
   - component: {fileID: 3944333847159361483}
@@ -131,6 +131,22 @@ Transform:
   - {fileID: 753941884}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1738867538742603772
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3648205875574225530}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c014f7e4d6cb47cead7da46d21e6ceaf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EnemyEventListener
+  DamageRequestChannel: {fileID: 11400000, guid: 95ccb7fce23d43c889da7e726869295b, type: 2}
+  DamageChannel: {fileID: 11400000, guid: 61ed7ca9efce4f2bbfcff194733a4a6d, type: 2}
+  PlayerHitChannel: {fileID: 0}
+  DeathChannel: {fileID: 11400000, guid: a6540d4b1df74390939745b4fd720f3a, type: 2}
 --- !u!212 &7963287954812073076
 SpriteRenderer:
   serializedVersion: 2
@@ -273,7 +289,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9f4f4bd67124474e9090db67b73beb6e, type: 3}
-  m_Name:
+  m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PunchingBehavior
   MoveSpeed: 3
   Acceleration: 18
@@ -288,25 +304,8 @@ MonoBehaviour:
   RecoveryDuration: 0.4
   TurnSpeed: 360
   PunchHitbox: {fileID: 753941885}
-  Health: 100
+  Health: 200
   EnemyDamagedChannel: {fileID: 11400000, guid: 61ed7ca9efce4f2bbfcff194733a4a6d, type: 2}
   EnemyDamageRequestChannel: {fileID: 11400000, guid: 95ccb7fce23d43c889da7e726869295b, type: 2}
   EnemyDiedChannel: {fileID: 11400000, guid: a6540d4b1df74390939745b4fd720f3a, type: 2}
   PlayerHitChannel: {fileID: 11400000, guid: bcd57692c85b4950a3d1e4e42307ee3a, type: 2}
-
---- !u!114 &1738867538742603772
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3648205875574225530}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c014f7e4d6cb47cead7da46d21e6ceaf, type: 3}
-  m_Name:
-  m_EditorClassIdentifier: Assembly-CSharp::EnemyEventListener
-  DamageRequestChannel: {fileID: 11400000, guid: 95ccb7fce23d43c889da7e726869295b, type: 2}
-  DamageChannel: {fileID: 11400000, guid: 61ed7ca9efce4f2bbfcff194733a4a6d, type: 2}
-  PlayerHitChannel: {fileID: 0}
-  DeathChannel: {fileID: 11400000, guid: a6540d4b1df74390939745b4fd720f3a, type: 2}

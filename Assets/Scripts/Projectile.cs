@@ -9,11 +9,13 @@ public class Projectile : MonoBehaviour
     private int _damage;
     private Transform _target;
     private bool _reflected;
+    private bool _perfectParry;
     private bool _homesIn = true;
     public bool IsDroneShot { get; private set; }
 
     public int Damage => _damage;
     public bool IsReflected => _reflected;
+    public bool IsPerfectParry => _perfectParry;
 
     void Awake()
     {
@@ -70,5 +72,10 @@ public class Projectile : MonoBehaviour
             if (enemyCollider.transform.root.CompareTag("Enemy"))
                 Physics2D.IgnoreCollision(projectileCollider, enemyCollider, false);
         }
+    }
+
+    public void MarkPerfectParry()
+    {
+        _perfectParry = true;
     }
 }

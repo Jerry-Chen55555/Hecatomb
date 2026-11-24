@@ -2,6 +2,7 @@ using UnityEngine;
 
 public class LungeBehavior : MonoBehaviour, IDamageable, IEnemyPlayerHit
 {
+    public int CurrentHealth => Health;
     public float ApproachSpeed = 3f;
     public float AggroRange = 7f;
     public float Acceleration = 18f;
