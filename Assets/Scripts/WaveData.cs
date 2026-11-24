@@ -12,7 +12,7 @@ public class WaveData : ScriptableObject
 public class WaveSubwave
 {
     public GameObject enemyPrefab;
-    [Min(1)] public int enemyCount = 1;
-    [Min(0f)] public float spawnInterval = 0.5f;
-    [Min(0f)] public float delayAfter = 2f;
+    public int enemyCount = 1;
+    public float spawnInterval = 0.5f;
+    public float delayAfter = 2f;
 }

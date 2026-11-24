@@ -4,12 +4,14 @@ using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using TMPro;
 
+public delegate void PlayerHealthChanged(int amount);
+
 public class PlayerController : MonoBehaviour
 {
     public EnemyEventChannel PlayerHitChannel;
     private EnemyEventListener _eventListener;
-    public event System.Action<int> DamageTaken;
-    public event System.Action<int> HealthHealed;
+    public PlayerHealthChanged DamageTaken;
+    public PlayerHealthChanged HealthHealed;
 
     public InputAction MoveAction;
     public Vector2 MoveInput;
@@ -53,14 +55,14 @@ public class PlayerController : MonoBehaviour
         transform.Translate(Vector3.up * MoveInput.y * Time.deltaTime * Speed);
     }
 
-    public void Heal(int amount)
+    public void Heal(int amount, bool showFlash = true)
     {
         int previousHealth = Health;
         Health = Mathf.Clamp(Health + Mathf.Max(0, amount), 0, MaxHealth);
         UpdateHealthBar();
 
         int healedAmount = Health - previousHealth;
-        if (amount > 0)
+        if (amount > 0 && showFlash)
             HealthHealed?.Invoke(healedAmount);
     }
 

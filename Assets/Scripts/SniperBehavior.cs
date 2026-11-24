@@ -244,7 +244,7 @@ public class SniperBehavior : MonoBehaviour, IDamageable
             }
             else
             {
-                _playerController.Heal(Mathf.CeilToInt(_parry.ParryHealAmount / 3f));
+                _playerController.Heal(Mathf.CeilToInt(_parry.ParryHealAmount / 3f), false);
             }
             TakeDamage(perfectParry ? 999999 : Mathf.CeilToInt(Health * 0.5f));
         }

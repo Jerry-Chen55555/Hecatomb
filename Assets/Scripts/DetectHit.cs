@@ -168,7 +168,7 @@ public class DetectHit : MonoBehaviour
         }
         else if (parried)
         {
-            player.Heal(Mathf.CeilToInt(parry.ParryHealAmount / 3f));
+            player.Heal(Mathf.CeilToInt(parry.ParryHealAmount / 3f), false);
         }
 
         return parried;
