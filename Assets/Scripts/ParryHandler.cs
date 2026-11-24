@@ -36,7 +36,7 @@ public class ParryHandler : MonoBehaviour
         }
 
         blockSuccess = true;
-        SfxPlayer.Instance?.PlayParry();
+        SfxPlayer.Instance?.PlayBlock();
         ShakeCamera();
         StartParry();
     }

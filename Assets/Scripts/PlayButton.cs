@@ -22,6 +22,7 @@ public class PlayButton : MonoBehaviour
     public void OnPressed()
     {
         StartCoroutine("StartSequence");
+        SfxPlayer.Instance?.PlayEntranceButton();
     }
 
     IEnumerator StartSequence()

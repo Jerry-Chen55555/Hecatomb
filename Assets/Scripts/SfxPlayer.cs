@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 public class SfxPlayer : MonoBehaviour
@@ -17,6 +18,15 @@ public class SfxPlayer : MonoBehaviour
     [SerializeField] private AudioClip bikeRev;
     [SerializeField] private AudioClip sniperBeep;
     [SerializeField] private AudioClip sniperShot;
+    [SerializeField] private AudioClip swordSlash;
+    [SerializeField] private AudioClip grasslandsMusic;
+    [SerializeField] private AudioClip technoBluesMusic;
+    [Range(0f, 1f)] public float musicVolume = 0.3f;
+    [SerializeField] private AudioClip entrance;
+    [SerializeField] private AudioClip entranceButton;
+    [SerializeField] private AudioClip block;
+
+    private AudioSource _musicSource;
 
     public void PlayPlayerHit()  => Play(playerHit);
     public void PlayPlayerDeath() => Play(playerDeath);
@@ -24,11 +34,15 @@ public class SfxPlayer : MonoBehaviour
     public void PlayEnemyDeath() => Play(enemyDeath);
     public void PlayEnemyShoot() => Play(enemyShoot);
     public void PlayParry()      => Play(parry);
+    public void PlayBlock()      => Play(block);
     public void PlayBikeHit()     => Play(bikeHit);
     public void PlayBikeParried() => Play(bikeParried);
     public void PlayBikeRev()     => Play(bikeRev);
     public void PlaySniperBeep()  => Play(sniperBeep);
     public void PlaySniperShot()  => Play(sniperShot);
+    public void PlaySwordSlash()  => Play(swordSlash);
+    public void PlayEntrance() => Play(entrance);
+    public void PlayEntranceButton() => Play(entranceButton);
 
     public void StartBikeEngine(AudioSource source)
     {
@@ -55,6 +69,29 @@ public class SfxPlayer : MonoBehaviour
         }
 
         Instance = this;
+    }
+
+    private IEnumerator Start()
+    {
+        if (grasslandsMusic == null && technoBluesMusic == null) yield break;
+
+        _musicSource = gameObject.AddComponent<AudioSource>();
+        _musicSource.playOnAwake = false;
+        _musicSource.spatialBlend = 0f;
+        _musicSource.volume = musicVolume;
+
+        AudioClip[] playlist = { grasslandsMusic, technoBluesMusic };
+        int trackIndex = 0;
+        while (true)
+        {
+            AudioClip track = playlist[trackIndex];
+            trackIndex = (trackIndex + 1) % playlist.Length;
+            if (track == null) continue;
+
+            _musicSource.clip = track;
+            _musicSource.Play();
+            yield return new WaitForSecondsRealtime(track.length);
+        }
     }
 
     private void OnDestroy()
