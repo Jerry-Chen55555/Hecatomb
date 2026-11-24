@@ -111,7 +111,7 @@ public class MotorcycleBehavior : MonoBehaviour, IDamageable
                 _parry.RegisterParrySuccess();
             if (perfectParry)
             {
-                _parry.RegisterPerfectParry(gameObject);
+                _parry.RegisterPerfectParry(-_heading);
                 _playerController.Heal(_parry.ParryHealAmount);
             }
             else

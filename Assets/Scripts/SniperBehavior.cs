@@ -239,7 +239,7 @@ public class SniperBehavior : MonoBehaviour, IDamageable
                 _parry.RegisterParrySuccess();
             if (perfectParry)
             {
-                _parry.RegisterPerfectParry(gameObject);
+                _parry.RegisterPerfectParry(transform);
                 _playerController.Heal(_parry.ParryHealAmount);
             }
             else

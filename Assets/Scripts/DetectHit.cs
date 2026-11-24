@@ -163,7 +163,21 @@ public class DetectHit : MonoBehaviour
 
         if (perfectParry)
         {
-            parry.RegisterPerfectParry(transform.root.gameObject);
+            Vector2 direction;
+            if (_projectile != null)
+            {
+                direction = _projectile.Owner != null
+                    ? (Vector2)_projectile.Owner.transform.position - (Vector2)player.transform.position
+                    : (Vector2)transform.position - (Vector2)player.transform.position;
+            }
+            else
+            {
+                // The melee hitbox faces from the enemy toward the player. Reverse it
+                // so the VFX is offset from the player toward the attacker, even if
+                // the enemy crossed the player during this physics step.
+                direction = -(Vector2)transform.right;
+            }
+            parry.RegisterPerfectParry(direction);
             player.Heal(parry.ParryHealAmount);
         }
         else if (parried)

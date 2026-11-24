@@ -12,6 +12,7 @@ public class Projectile : MonoBehaviour
     private bool _perfectParry;
     private bool _homesIn = true;
     public bool IsDroneShot { get; private set; }
+    public GameObject Owner { get; private set; }
 
     public int Damage => _damage;
     public bool IsReflected => _reflected;
@@ -24,11 +25,17 @@ public class Projectile : MonoBehaviour
         _target = GameObject.Find("Player").transform;
     }
 
-    public void Init(Vector2 direction, float speed, int projectileDamage, bool droneShot = false)
+    public void Init(
+        Vector2 direction,
+        float speed,
+        int projectileDamage,
+        bool droneShot = false,
+        GameObject owner = null)
     {
         _projectileRigidbody.linearVelocity = direction.normalized * speed;
         _damage = projectileDamage;
         IsDroneShot = droneShot;
+        Owner = owner;
         _homesIn = !droneShot;
         Destroy(gameObject, Lifetime);
     }

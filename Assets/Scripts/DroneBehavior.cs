@@ -153,7 +153,7 @@ public class DroneBehavior : MonoBehaviour, IDamageable
         Projectile projectile = shot.GetComponent<Projectile>();
         if (projectile != null)
         {
-            projectile.Init(shotDirection, BulletSpeed, BulletDamage, true);
+            projectile.Init(shotDirection, BulletSpeed, BulletDamage, true, gameObject);
         }
     }
 

@@ -19,6 +19,7 @@ public class RangedBehavior : MonoBehaviour, IDamageable
 
     public float ShootRange = 10f;
     public float FireInterval = 3f;
+    public float TelegraphDuration = 0.3f;
     public float ProjectileSpeed = 10f;
     public float SpreadAngle = 4f;
     public int ProjectileDamage = 20;
@@ -33,6 +34,7 @@ public class RangedBehavior : MonoBehaviour, IDamageable
     private float _fireTimer;
     private float _strafeTimer;
     private float _strafeDirection = 1f;
+    private bool _telegraphing;
 
     void Start()
     {
@@ -99,10 +101,10 @@ public class RangedBehavior : MonoBehaviour, IDamageable
         _rigidbody.MoveRotation(angle);
 
         _fireTimer -= deltaTime;
-        if (_fireTimer <= 0f && distance <= ShootRange)
+        if (!_telegraphing && _fireTimer <= 0f && distance <= ShootRange)
         {
-            Shoot(direction);
             _fireTimer = FireInterval;
+            StartCoroutine(ShootAfterTelegraph());
         }
     }
 
@@ -128,9 +130,26 @@ public class RangedBehavior : MonoBehaviour, IDamageable
         }
     }
 
+    System.Collections.IEnumerator ShootAfterTelegraph()
+    {
+        _telegraphing = true;
+        EnemyVisualEffects.FlashAggression(gameObject);
+        yield return new WaitForSeconds(TelegraphDuration);
+
+        if (Health > 0 && _player != null)
+        {
+            Vector2 toPlayer = (Vector2)_player.transform.position - (Vector2)transform.position;
+            Vector2 direction = toPlayer.sqrMagnitude > 0.0001f
+                ? toPlayer.normalized
+                : Vector2.right;
+            Shoot(direction);
+        }
+
+        _telegraphing = false;
+    }
+
     void Shoot(Vector2 direction)
     {
-        EnemyVisualEffects.FlashAggression(gameObject);
         SfxPlayer.Instance?.PlayEnemyShoot();
         float angle = Random.Range(-SpreadAngle, SpreadAngle);
         Vector2 shotDirection = Quaternion.Euler(0f, 0f, angle) * direction;
@@ -138,6 +157,6 @@ public class RangedBehavior : MonoBehaviour, IDamageable
         GameObject shot = Instantiate(ProjectilePrefab, spawnPosition, Quaternion.identity, transform);
 
         Projectile projectile = shot.GetComponent<Projectile>();
-        projectile.Init(shotDirection, ProjectileSpeed, ProjectileDamage);
+        projectile.Init(shotDirection, ProjectileSpeed, ProjectileDamage, owner: gameObject);
     }
 }

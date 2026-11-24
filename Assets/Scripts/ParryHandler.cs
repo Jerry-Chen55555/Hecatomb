@@ -54,9 +54,27 @@ public class ParryHandler : MonoBehaviour
         StartParry();
     }
 
-    public void RegisterPerfectParry(GameObject enemy)
+    public void RegisterPerfectParry(Transform enemy)
     {
-        Vector2 direction = ((Vector2)enemy.transform.position - (Vector2)transform.position).normalized;
+        Vector2 direction = (Vector2)enemy.position - (Vector2)transform.position;
+        if (direction.sqrMagnitude < 0.0001f)
+        {
+            direction = -(Vector2)enemy.right;
+        }
+        RegisterPerfectParry(direction);
+    }
+
+    public void RegisterPerfectParry(Vector2 direction)
+    {
+        if (direction.sqrMagnitude < 0.0001f)
+        {
+            direction = Vector2.right;
+        }
+        else
+        {
+            direction.Normalize();
+        }
+
         Vector3 position = transform.position + (Vector3)(direction * ParryOffset);
         Instantiate(PerfectParryVFX, position, Quaternion.identity);
 

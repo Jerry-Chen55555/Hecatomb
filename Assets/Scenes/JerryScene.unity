@@ -3060,7 +3060,7 @@ MonoBehaviour:
   parrySuccess: 0
   ParryCooldown: 0.5
   ParryHealAmount: 20
-  ParryOffset: 0
+  ParryOffset: 0.85
 --- !u!114 &1909698753
 MonoBehaviour:
   m_ObjectHideFlags: 0
